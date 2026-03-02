@@ -450,8 +450,11 @@
 
   /* ===== QUADRANT ===== */
   .quadrant-container {
-    max-width: 800px;
-    margin: 0 auto 48px;
+    max-width: 900px;
+    margin: 0 auto 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
   }
   .quadrant {
     display: grid;
@@ -460,6 +463,7 @@
     background: var(--g200);
     border-radius: var(--radius);
     overflow: hidden;
+    flex: 1;
     position: relative;
   }
   .quadrant::before {
@@ -536,7 +540,7 @@
 
   .quadrant-labels {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     max-width: 800px;
     margin: 0 auto;
     padding: 12px 0 0;
@@ -547,6 +551,81 @@
     text-transform: uppercase;
     letter-spacing: 2px;
     color: var(--g400);
+    background: var(--g100);
+    padding: 4px 16px;
+    border-radius: 20px;
+  }
+
+  /* Quadrant axis labels */
+  .q-axis-pill {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--g400);
+    background: var(--g100);
+    padding: 5px 14px;
+    border-radius: 20px;
+    display: inline-block;
+  }
+  .q-axis-row {
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  /* quadrant-container defined above */
+  .q-axis-side {
+    writing-mode: vertical-lr;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .q-axis-side-left { transform: rotate(180deg); }
+  .q-axis-side .q-axis-pill {
+    font-size: 0.58rem;
+    padding: 4px 10px;
+    white-space: nowrap;
+  }
+
+  /* Quadrant prompt (visible before claim) */
+  .q-prompt {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--navy);
+    line-height: 1.4;
+    text-align: center;
+    padding: 8px 0;
+  }
+  .quadrant-cell.claimed .q-prompt { display: none; }
+
+  /* Label reveal (hidden until claimed) */
+  .q-label-reveal {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.2rem;
+    color: var(--navy);
+    margin-bottom: 8px;
+  }
+
+  /* Claimed state */
+  .quadrant-cell.claimed {
+    border: 3px solid var(--gold);
+    box-shadow: 0 0 0 4px rgba(255,194,10,0.2);
+  }
+  .quadrant-cell.claimed-mine {
+    border-color: var(--gold);
+    background: rgba(255,194,10,0.06);
+  }
+  .quadrant-cell.claimed-mine::after {
+    content: 'YOU';
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    font-size: 0.6rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: var(--gold-dark);
+    background: rgba(255,194,10,0.15);
+    padding: 2px 8px;
+    border-radius: 4px;
   }
 
   .axis-label {
@@ -1387,6 +1466,356 @@
     line-height: 1.55;
     border-left: 3px solid var(--gold);
   }
+
+  /* ===== SCENARIO TWO-STEP REVEAL ===== */
+  .scenario-response {
+    position: relative;
+  }
+  .scenario-response.hidden-response .response-content {
+    filter: blur(6px);
+    user-select: none;
+    pointer-events: none;
+    transition: filter 0.4s ease;
+  }
+  .scenario-response.hidden-response .response-overlay {
+    display: flex;
+  }
+  .scenario-response .response-content {
+    filter: blur(0);
+    transition: filter 0.4s ease;
+  }
+  .response-overlay {
+    display: none;
+    position: absolute;
+    inset: 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    gap: 12px;
+    text-align: center;
+    padding: 20px;
+  }
+  .response-overlay .think-prompt {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.15rem;
+    color: var(--navy);
+  }
+  .response-overlay .think-sub {
+    font-size: 0.82rem;
+    color: var(--g500);
+    max-width: 320px;
+    line-height: 1.5;
+  }
+  .reveal-approach-btn {
+    margin-top: 8px;
+    padding: 10px 28px;
+    background: var(--green);
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    font-family: 'Lato', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .reveal-approach-btn:hover {
+    background: #219a52;
+    transform: translateY(-1px);
+  }
+
+  /* ===== BOUNDARY CLASSIFY ACTIVITY ===== */
+  .classify-activity {
+    margin-top: 48px;
+    padding-top: 48px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+  .classify-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 20px;
+    transition: border-color 0.3s;
+  }
+  .classify-card.answered { border-color: rgba(255,255,255,0.15); }
+  .classify-scenario {
+    font-size: 0.95rem;
+    color: rgba(255,255,255,0.85);
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+  .classify-prompt {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+  .classify-options {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .classify-btn {
+    padding: 8px 20px;
+    border: 2px solid rgba(255,255,255,0.15);
+    border-radius: 30px;
+    background: transparent;
+    color: rgba(255,255,255,0.7);
+    font-family: 'Lato', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .classify-btn:hover {
+    border-color: rgba(255,255,255,0.3);
+    color: #fff;
+  }
+  .classify-btn.green { border-color: var(--green); color: var(--green); }
+  .classify-btn.yellow { border-color: var(--gold); color: var(--gold); }
+  .classify-btn.red { border-color: var(--red); color: var(--red); }
+  .classify-btn.selected {
+    color: #fff;
+  }
+  .classify-btn.selected.green { background: var(--green); }
+  .classify-btn.selected.yellow { background: var(--gold); color: var(--navy); }
+  .classify-btn.selected.red { background: var(--red); }
+  .classify-answer {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.4s ease, opacity 0.3s ease;
+  }
+  .classify-card.answered .classify-answer {
+    max-height: 200px;
+    opacity: 1;
+  }
+  .classify-answer-inner {
+    padding: 14px;
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+    line-height: 1.6;
+  }
+
+  /* ===== DECISION QUIZ ===== */
+  .decision-quiz {
+    margin-bottom: 48px;
+  }
+  .dq-card {
+    background: #fff;
+    border-radius: var(--radius);
+    padding: 24px 28px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--g200);
+    transition: border-color 0.3s;
+  }
+  .dq-card.answered { border-color: var(--g300); }
+  .dq-question {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 12px;
+    line-height: 1.5;
+  }
+  .dq-options {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  .dq-btn {
+    padding: 8px 20px;
+    border: 2px solid var(--g200);
+    border-radius: 30px;
+    background: transparent;
+    font-family: 'Lato', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .dq-btn.dq-green { color: var(--green); border-color: var(--green); }
+  .dq-btn.dq-yellow { color: var(--gold-dark); border-color: var(--gold); }
+  .dq-btn.dq-red { color: var(--red); border-color: var(--red); }
+  .dq-btn:hover { transform: scale(1.05); }
+  .dq-btn.selected { color: #fff; }
+  .dq-btn.selected.dq-green { background: var(--green); }
+  .dq-btn.selected.dq-yellow { background: var(--gold); color: var(--navy); }
+  .dq-btn.selected.dq-red { background: var(--red); }
+  .dq-feedback {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.4s ease, opacity 0.3s ease;
+  }
+  .dq-card.answered .dq-feedback {
+    max-height: 150px;
+    opacity: 1;
+  }
+  .dq-feedback-inner {
+    padding: 12px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+    line-height: 1.55;
+    margin-top: 8px;
+  }
+
+  /* ===== REVEALABLE EXAMPLES ===== */
+  .reveal-example-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 16px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 20px;
+    color: rgba(255,255,255,0.45);
+    font-family: 'Lato', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 12px;
+  }
+  .reveal-example-btn:hover {
+    background: rgba(255,255,255,0.1);
+    color: var(--gold);
+    border-color: rgba(255,194,10,0.3);
+  }
+  .hidden-example {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.4s ease, opacity 0.3s ease;
+  }
+  .hidden-example.shown {
+    max-height: 200px;
+    opacity: 1;
+  }
+
+  /* ===== PBL CAPSTONE ===== */
+  .capstone-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin-top: 32px;
+  }
+  .capstone-brief {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius);
+    padding: 32px;
+  }
+  .capstone-brief h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.3rem;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+  .capstone-checklist {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .capstone-checklist li {
+    padding: 10px 0 10px 32px;
+    position: relative;
+    font-size: 0.88rem;
+    color: rgba(255,255,255,0.7);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    line-height: 1.5;
+  }
+  .capstone-checklist li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 14px;
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    border: 2px solid rgba(255,255,255,0.2);
+  }
+  .capstone-checklist li strong {
+    color: rgba(255,255,255,0.9);
+  }
+  .capstone-paths {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .capstone-path {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius);
+    padding: 28px;
+    transition: border-color 0.2s;
+  }
+  .capstone-path:hover {
+    border-color: rgba(255,194,10,0.3);
+  }
+  .capstone-path h4 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.1rem;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+  .capstone-path .path-time {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+  .capstone-path p {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+  .capstone-prompt-box {
+    background: rgba(0,0,0,0.2);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.6;
+    white-space: pre-wrap;
+    position: relative;
+  }
+  .copy-prompt-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    padding: 4px 12px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 4px;
+    color: rgba(255,255,255,0.6);
+    font-family: 'Lato', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .copy-prompt-btn:hover {
+    background: var(--gold);
+    color: var(--navy);
+    border-color: var(--gold);
+  }
+
+  @media (max-width: 768px) {
+    .classify-options { flex-direction: column; }
+    .dq-options { flex-direction: column; }
+    .capstone-layout { grid-template-columns: 1fr; }
+    .q-axis-side { display: none; }
+  }
 </style>
 </head>
 <body>
@@ -1411,6 +1840,7 @@
       <a href="#scenarios">Scenarios</a>
       <a href="#toolkit">Toolkit</a>
       <a href="#resources">Resources</a>
+      <a href="#capstone">Build</a>
       <a href="#quickref">Reference</a>
     </div>
   </div>
@@ -1561,17 +1991,20 @@
         <div class="crt-card">
           <h4>Validate</h4>
           <p>Affirm students' cultural identities. Acknowledge lived experiences as legitimate knowledge and intellectual assets in the classroom.</p>
-          <div class="crt-example">Ask students to connect a coding concept to something from their daily life or community.</div>
+          <button class="reveal-example-btn" onclick="toggleExample(this)">How would you apply this? &darr;</button>
+          <div class="hidden-example crt-example">Ask students to connect a coding concept to something from their daily life or community.</div>
         </div>
         <div class="crt-card">
           <h4>Center</h4>
           <p>Use culturally meaningful examples and context. Frame technical problems around real challenges students' communities face.</p>
-          <div class="crt-example">Build a project that solves a problem in students' neighborhoods &mdash; transit apps, local business sites, community boards.</div>
+          <button class="reveal-example-btn" onclick="toggleExample(this)">How would you apply this? &darr;</button>
+          <div class="hidden-example crt-example">Build a project that solves a problem in students' neighborhoods &mdash; transit apps, local business sites, community boards.</div>
         </div>
         <div class="crt-card">
           <h4>Bridge</h4>
           <p>Connect classroom learning to career pathways and professional identity. Help students see themselves in the tech industry.</p>
-          <div class="crt-example">Showcase technologists from similar backgrounds. Discuss how tech skills translate to community impact.</div>
+          <button class="reveal-example-btn" onclick="toggleExample(this)">How would you apply this? &darr;</button>
+          <div class="hidden-example crt-example">Showcase technologists from similar backgrounds. Discuss how tech skills translate to community impact.</div>
         </div>
       </div>
     </div>
@@ -1653,32 +2086,38 @@
         <div class="socratic-card">
           <h4>Clarification</h4>
           <div class="socratic-purpose">Surface assumptions and ensure understanding</div>
-          <div class="socratic-example">"What do you mean when you say the code 'doesn't work'? What did you expect to happen vs. what actually happened?"</div>
+          <button class="reveal-example-btn" onclick="toggleExample(this)">What would you ask? &darr;</button>
+          <div class="hidden-example socratic-example">"What do you mean when you say the code 'doesn't work'? What did you expect to happen vs. what actually happened?"</div>
         </div>
         <div class="socratic-card">
           <h4>Probing Assumptions</h4>
           <div class="socratic-purpose">Challenge underlying beliefs about the problem</div>
-          <div class="socratic-example">"What are you assuming about how this function handles null values? What if that assumption is wrong?"</div>
+          <button class="reveal-example-btn" onclick="toggleExample(this)">What would you ask? &darr;</button>
+          <div class="hidden-example socratic-example">"What are you assuming about how this function handles null values? What if that assumption is wrong?"</div>
         </div>
         <div class="socratic-card">
           <h4>Evidence &amp; Reasoning</h4>
           <div class="socratic-purpose">Encourage students to support their reasoning</div>
-          <div class="socratic-example">"How do you know this loop runs exactly 5 times? Can you trace through it with me?"</div>
+          <button class="reveal-example-btn" onclick="toggleExample(this)">What would you ask? &darr;</button>
+          <div class="hidden-example socratic-example">"How do you know this loop runs exactly 5 times? Can you trace through it with me?"</div>
         </div>
         <div class="socratic-card">
           <h4>Exploring Viewpoints</h4>
           <div class="socratic-purpose">Consider alternative approaches</div>
-          <div class="socratic-example">"That's one way to solve it. What would a different approach look like? What are the trade-offs?"</div>
+          <button class="reveal-example-btn" onclick="toggleExample(this)">What would you ask? &darr;</button>
+          <div class="hidden-example socratic-example">"That's one way to solve it. What would a different approach look like? What are the trade-offs?"</div>
         </div>
         <div class="socratic-card">
           <h4>Implications</h4>
           <div class="socratic-purpose">Think about consequences and connections</div>
-          <div class="socratic-example">"If you change this variable here, what happens to the rest of the program? What could go wrong?"</div>
+          <button class="reveal-example-btn" onclick="toggleExample(this)">What would you ask? &darr;</button>
+          <div class="hidden-example socratic-example">"If you change this variable here, what happens to the rest of the program? What could go wrong?"</div>
         </div>
         <div class="socratic-card">
           <h4>Meta-Questions</h4>
           <div class="socratic-purpose">Reflect on the learning process itself</div>
-          <div class="socratic-example">"What strategy did you use to debug this? How would you approach a similar problem next time?"</div>
+          <button class="reveal-example-btn" onclick="toggleExample(this)">What would you ask? &darr;</button>
+          <div class="hidden-example socratic-example">"What strategy did you use to debug this? How would you approach a similar problem next time?"</div>
         </div>
       </div>
     </div>
@@ -1693,29 +2132,34 @@
     <p class="section-desc">Every educator has a natural management style. Understanding where you fall helps you intentionally shift toward the most effective approach for your learners. There's no wrong answer &mdash; just awareness.</p>
   </div>
 
-  <div class="axis-label reveal" style="transition-delay:0.1s">
-    <span>High Responsiveness</span>
+  <p class="reveal" style="transition-delay:0.08s; text-align:center; font-size:0.85rem; color:var(--g400); max-width:600px; margin:0 auto 24px; line-height:1.6;">Think about how you show up in the classroom. Read the two axes, then <strong style="color:var(--navy);">click the quadrant that feels most like you</strong>. Be honest &mdash; there's no wrong answer.</p>
+
+  <div class="q-axis-row reveal" style="transition-delay:0.1s; text-align:center; margin-bottom:6px;">
+    <span class="q-axis-pill">&#8593; I welcome student input &amp; bring high energy</span>
   </div>
   <div class="quadrant-container reveal" style="transition-delay:0.15s">
+    <div class="q-axis-side q-axis-side-left"><span class="q-axis-pill">&#8592; Flexible with outputs</span></div>
     <div class="quadrant">
-      <div class="quadrant-cell q-permissive" onclick="toggleQuadrant(this)">
-        <h4>Permissive</h4>
-        <div class="q-tap-hint">Click to reveal</div>
+      <div class="quadrant-cell q-permissive" onclick="claimQuadrant(this)">
+        <div class="q-prompt">High warmth<br>Flexible standards</div>
+        <div class="q-tap-hint">This is me</div>
         <div class="q-details">
+          <h4 class="q-label-reveal">Permissive</h4>
           <div class="q-quote">"Whatever you want!"</div>
           <ul>
             <li>Low expectations</li>
             <li>Few rules</li>
             <li>Indulgent &amp; accepting</li>
             <li>Avoids confrontation</li>
-            <li>Warm</li>
+            <li>Very warm</li>
           </ul>
         </div>
       </div>
-      <div class="quadrant-cell q-authoritative" onclick="toggleQuadrant(this)">
-        <h4>Authoritative</h4>
-        <div class="q-tap-hint">Click to reveal</div>
+      <div class="quadrant-cell q-authoritative" onclick="claimQuadrant(this)">
+        <div class="q-prompt">High warmth<br>High standards</div>
+        <div class="q-tap-hint">This is me</div>
         <div class="q-details">
+          <h4 class="q-label-reveal">Authoritative</h4>
           <div class="q-quote">"Let's discuss this."</div>
           <ul>
             <li>High expectations</li>
@@ -1726,10 +2170,11 @@
           </ul>
         </div>
       </div>
-      <div class="quadrant-cell q-uninvolved" onclick="toggleQuadrant(this)">
-        <h4>Uninvolved</h4>
-        <div class="q-tap-hint">Click to reveal</div>
+      <div class="quadrant-cell q-uninvolved" onclick="claimQuadrant(this)">
+        <div class="q-prompt">Low warmth<br>Flexible standards</div>
+        <div class="q-tap-hint">This is me</div>
         <div class="q-details">
+          <h4 class="q-label-reveal">Uninvolved</h4>
           <div class="q-quote">"I really don't care."</div>
           <ul>
             <li>No expectations</li>
@@ -1740,10 +2185,11 @@
           </ul>
         </div>
       </div>
-      <div class="quadrant-cell q-authoritarian" onclick="toggleQuadrant(this)">
-        <h4>Authoritarian</h4>
-        <div class="q-tap-hint">Click to reveal</div>
+      <div class="quadrant-cell q-authoritarian" onclick="claimQuadrant(this)">
+        <div class="q-prompt">Low warmth<br>High standards</div>
+        <div class="q-tap-hint">This is me</div>
         <div class="q-details">
+          <h4 class="q-label-reveal">Authoritarian</h4>
           <div class="q-quote">"Because I said so!"</div>
           <ul>
             <li>High expectations</li>
@@ -1755,12 +2201,12 @@
         </div>
       </div>
     </div>
+    <div class="q-axis-side q-axis-side-right"><span class="q-axis-pill">Firm expectations &#8594;</span></div>
   </div>
-  <div class="quadrant-labels reveal" style="transition-delay:0.2s">
-    <span>Low Demandingness</span>
-    <span>High Demandingness</span>
+  <div class="q-axis-row reveal" style="transition-delay:0.2s; text-align:center; margin-top:6px;">
+    <span class="q-axis-pill">&#8595; I keep structure tight &amp; energy measured</span>
   </div>
-  <button class="quadrant-reveal-all reveal" style="transition-delay:0.25s" onclick="revealAllQuadrants()">Reveal All Styles</button>
+  <button class="quadrant-reveal-all reveal" style="transition-delay:0.25s" onclick="revealAllQuadrants()" style="display:none;">See All Styles</button>
 
   <div class="reveal" style="margin-top:64px; transition-delay:0.25s">
     <div class="section-label" style="margin-bottom:8px;">Types of Student Inquiry</div>
@@ -1852,6 +2298,86 @@
         <p style="color:rgba(255,255,255,0.6); font-size:0.92rem; line-height:1.7;">Behaviors that students display are not because they are actively trying to challenge you. Children are learning and testing what works, and developing social skills to navigate life. Sometimes testing us is part of that. Take a deep breath. It's not personal!</p>
       </div>
     </div>
+
+    <div class="classify-activity reveal" style="transition-delay:0.45s">
+      <div class="pedagogy-sub-title">Check Yourself: Boundary Scenarios</div>
+      <div class="pedagogy-sub-desc">Read each situation. Before revealing the answer, decide: is this <span style="color:var(--green);">Appropriate</span>, <span style="color:var(--gold);">Needs Caution</span>, or a <span style="color:var(--red);">Boundary Violation</span>?</div>
+
+      <div class="classify-card" data-answer="red">
+        <div class="classify-scenario">A student DMs you on Instagram asking for help with a homework problem. You reply with the answer and your phone number "in case they need more help."</div>
+        <div class="classify-prompt">What's your call?</div>
+        <div class="classify-options">
+          <button class="classify-btn" onclick="classifyAnswer(this,'green')">Appropriate</button>
+          <button class="classify-btn" onclick="classifyAnswer(this,'yellow')">Needs Caution</button>
+          <button class="classify-btn" onclick="classifyAnswer(this,'red')">Boundary Violation</button>
+        </div>
+        <div class="classify-answer">
+          <div class="classify-answer-inner" style="background:rgba(231,76,60,0.1); color:rgba(255,255,255,0.8); border-left:3px solid var(--red);">
+            <strong style="color:var(--red);">Boundary Violation.</strong> Never share personal contact info. Redirect to official channels: "Great question! Post that in our Slack channel and I'll answer there."
+          </div>
+        </div>
+      </div>
+
+      <div class="classify-card" data-answer="green">
+        <div class="classify-scenario">A student is struggling with a concept. You share a supplemental YouTube tutorial in the class Slack channel and tag the student: "This might help with what you were asking about today!"</div>
+        <div class="classify-prompt">What's your call?</div>
+        <div class="classify-options">
+          <button class="classify-btn" onclick="classifyAnswer(this,'green')">Appropriate</button>
+          <button class="classify-btn" onclick="classifyAnswer(this,'yellow')">Needs Caution</button>
+          <button class="classify-btn" onclick="classifyAnswer(this,'red')">Boundary Violation</button>
+        </div>
+        <div class="classify-answer">
+          <div class="classify-answer-inner" style="background:rgba(39,174,96,0.1); color:rgba(255,255,255,0.8); border-left:3px solid var(--green);">
+            <strong style="color:var(--green);">Appropriate.</strong> You used an official channel, the message is about coursework, and it supports the student's learning. This is exactly what good educators do.
+          </div>
+        </div>
+      </div>
+
+      <div class="classify-card" data-answer="yellow">
+        <div class="classify-scenario">A student tells you they're having a really hard time at home and asks if you can keep it between the two of you. You want to respect their trust.</div>
+        <div class="classify-prompt">What's your call?</div>
+        <div class="classify-options">
+          <button class="classify-btn" onclick="classifyAnswer(this,'green')">Appropriate</button>
+          <button class="classify-btn" onclick="classifyAnswer(this,'yellow')">Needs Caution</button>
+          <button class="classify-btn" onclick="classifyAnswer(this,'red')">Boundary Violation</button>
+        </div>
+        <div class="classify-answer">
+          <div class="classify-answer-inner" style="background:rgba(255,194,10,0.1); color:rgba(255,255,255,0.8); border-left:3px solid var(--gold);">
+            <strong style="color:var(--gold);">Needs Caution.</strong> Be honest: "I care about you, and if something affects your safety, I may need to share it with someone who can help." No secrets &mdash; you're a mandatory reporter.
+          </div>
+        </div>
+      </div>
+
+      <div class="classify-card" data-answer="red">
+        <div class="classify-scenario">After class, you and a student bond over a shared interest in gaming. You add them on Discord to continue chatting and play games together on weekends.</div>
+        <div class="classify-prompt">What's your call?</div>
+        <div class="classify-options">
+          <button class="classify-btn" onclick="classifyAnswer(this,'green')">Appropriate</button>
+          <button class="classify-btn" onclick="classifyAnswer(this,'yellow')">Needs Caution</button>
+          <button class="classify-btn" onclick="classifyAnswer(this,'red')">Boundary Violation</button>
+        </div>
+        <div class="classify-answer">
+          <div class="classify-answer-inner" style="background:rgba(231,76,60,0.1); color:rgba(255,255,255,0.8); border-left:3px solid var(--red);">
+            <strong style="color:var(--red);">Boundary Violation.</strong> Personal social connections with students outside the program are off-limits. Channel that energy into classroom activities &mdash; build a gaming-themed coding project instead.
+          </div>
+        </div>
+      </div>
+
+      <div class="classify-card" data-answer="yellow">
+        <div class="classify-scenario">A student gives you a big hug at the end of the program's final showcase. Their family is watching and the student is emotional about completing the program.</div>
+        <div class="classify-prompt">What's your call?</div>
+        <div class="classify-options">
+          <button class="classify-btn" onclick="classifyAnswer(this,'green')">Appropriate</button>
+          <button class="classify-btn" onclick="classifyAnswer(this,'yellow')">Needs Caution</button>
+          <button class="classify-btn" onclick="classifyAnswer(this,'red')">Boundary Violation</button>
+        </div>
+        <div class="classify-answer">
+          <div class="classify-answer-inner" style="background:rgba(255,194,10,0.1); color:rgba(255,255,255,0.8); border-left:3px solid var(--gold);">
+            <strong style="color:var(--gold);">Needs Caution.</strong> You didn't initiate &mdash; that's good. Redirect to a side hug, keep it brief, and stay in public view. The student's intent is genuine; your role is to navigate it safely.
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1861,6 +2387,61 @@
     <div class="section-label">05 &mdash; Decision Making</div>
     <div class="section-title">The Red, Yellow, Green Framework</div>
     <p class="section-desc">This framework outlines three levels of decision-making authority. Think of it like a traffic light for your ideas and changes. It's designed not to restrict you, but to empower you.</p>
+  </div>
+
+  <div class="decision-quiz reveal" style="transition-delay:0.08s">
+    <h3 style="font-family:'DM Serif Display',serif; font-size:1.3rem; margin-bottom:6px;">Test Your Instincts</h3>
+    <p style="font-size:0.88rem; color:var(--g500); margin-bottom:24px;">Before seeing the full framework, decide: would you need approval for these changes?</p>
+
+    <div class="dq-card" data-answer="green">
+      <div class="dq-question">You want to swap out a stock photo in your slides for an image that better represents your students' community.</div>
+      <div class="dq-options">
+        <button class="dq-btn dq-green" onclick="decisionQuiz(this,'green')">Green &mdash; Go</button>
+        <button class="dq-btn dq-yellow" onclick="decisionQuiz(this,'yellow')">Yellow &mdash; Guardrails</button>
+        <button class="dq-btn dq-red" onclick="decisionQuiz(this,'red')">Red &mdash; Approval</button>
+      </div>
+      <div class="dq-feedback"><div class="dq-feedback-inner" style="background:var(--green-light); border-left:3px solid var(--green);"><strong style="color:var(--green);">Green!</strong> Modifying presentation content to be more culturally responsive is exactly in your lane.</div></div>
+    </div>
+
+    <div class="dq-card" data-answer="red">
+      <div class="dq-question">You think the class would benefit from using a new code editor that isn't currently in the tech stack.</div>
+      <div class="dq-options">
+        <button class="dq-btn dq-green" onclick="decisionQuiz(this,'green')">Green &mdash; Go</button>
+        <button class="dq-btn dq-yellow" onclick="decisionQuiz(this,'yellow')">Yellow &mdash; Guardrails</button>
+        <button class="dq-btn dq-red" onclick="decisionQuiz(this,'red')">Red &mdash; Approval</button>
+      </div>
+      <div class="dq-feedback"><div class="dq-feedback-inner" style="background:var(--red-light); border-left:3px solid var(--red);"><strong style="color:var(--red);">Red.</strong> New tools must be vetted for security, licensing, and IT support. Submit a Decision Request via Asana.</div></div>
+    </div>
+
+    <div class="dq-card" data-answer="yellow">
+      <div class="dq-question">You want to add a short ungraded warm-up exercise at the start of class to review yesterday's concepts.</div>
+      <div class="dq-options">
+        <button class="dq-btn dq-green" onclick="decisionQuiz(this,'green')">Green &mdash; Go</button>
+        <button class="dq-btn dq-yellow" onclick="decisionQuiz(this,'yellow')">Yellow &mdash; Guardrails</button>
+        <button class="dq-btn dq-red" onclick="decisionQuiz(this,'red')">Red &mdash; Approval</button>
+      </div>
+      <div class="dq-feedback"><div class="dq-feedback-inner" style="background:var(--yellow-light); border-left:3px solid var(--yellow);"><strong style="color:var(--gold-dark);">Yellow.</strong> You can add 1 ungraded exercise per day, but label it clearly as "Optional / Ungraded Practice" in Google Classroom.</div></div>
+    </div>
+
+    <div class="dq-card" data-answer="red">
+      <div class="dq-question">Several students are behind, and you want to push tomorrow's graded project deadline back by a week.</div>
+      <div class="dq-options">
+        <button class="dq-btn dq-green" onclick="decisionQuiz(this,'green')">Green &mdash; Go</button>
+        <button class="dq-btn dq-yellow" onclick="decisionQuiz(this,'yellow')">Yellow &mdash; Guardrails</button>
+        <button class="dq-btn dq-red" onclick="decisionQuiz(this,'red')">Red &mdash; Approval</button>
+      </div>
+      <div class="dq-feedback"><div class="dq-feedback-inner" style="background:var(--red-light); border-left:3px solid var(--red);"><strong style="color:var(--red);">Red.</strong> Schedule and graded work changes have broad impact. Flag it to your T&L Manager &mdash; they may have solutions you haven't considered.</div></div>
+    </div>
+
+    <div class="dq-card" data-answer="green">
+      <div class="dq-question">Energy is low after lunch. You want to replace a lecture segment with a think-pair-share breakout activity covering the same material.</div>
+      <div class="dq-options">
+        <button class="dq-btn dq-green" onclick="decisionQuiz(this,'green')">Green &mdash; Go</button>
+        <button class="dq-btn dq-yellow" onclick="decisionQuiz(this,'yellow')">Yellow &mdash; Guardrails</button>
+        <button class="dq-btn dq-red" onclick="decisionQuiz(this,'red')">Red &mdash; Approval</button>
+      </div>
+      <div class="dq-feedback"><div class="dq-feedback-inner" style="background:var(--green-light); border-left:3px solid var(--green);"><strong style="color:var(--green);">Green!</strong> Adjusting delivery method and engagement strategies is your superpower. Same content, different vehicle &mdash; go for it.</div></div>
+    </div>
   </div>
 
   <div class="framework-section reveal" style="transition-delay:0.1s">
@@ -1995,7 +2576,13 @@
                 <p style="color:rgba(255,255,255,0.8);">Several students are still confused. You have two more key concepts to cover before the end of class.</p>
               </div>
             </div>
-            <div class="scenario-response" style="background:rgba(39,174,96,0.1); border-left-color:var(--green);">
+            <div class="scenario-response hidden-response" style="background:rgba(39,174,96,0.1); border-left-color:var(--green);">
+              <div class="response-overlay">
+                <div class="think-prompt">What would you do?</div>
+                <div class="think-sub">Take a moment to think through your approach before seeing ours.</div>
+                <button class="reveal-approach-btn" onclick="revealApproach(this)">Reveal Our Approach</button>
+              </div>
+              <div class="response-content">
               <h4>Suggested Approaches</h4>
               <ul style="color:rgba(255,255,255,0.75);">
                 <li>Pause the exercise and do a quick temperature check with the class</li>
@@ -2004,6 +2591,7 @@
                 <li>Convert the remaining exercise to a guided demo where you code together live</li>
                 <li>Share a recorded walkthrough in Slack for students who need more time</li>
               </ul>
+              </div>
             </div>
           </div>
         </div>
@@ -2031,7 +2619,13 @@
                 <p style="color:rgba(255,255,255,0.8);">You want to support this student without singling them out or making assumptions about their needs.</p>
               </div>
             </div>
-            <div class="scenario-response" style="background:rgba(39,174,96,0.1); border-left-color:var(--green);">
+            <div class="scenario-response hidden-response" style="background:rgba(39,174,96,0.1); border-left-color:var(--green);">
+              <div class="response-overlay">
+                <div class="think-prompt">What would you do?</div>
+                <div class="think-sub">Take a moment to think through your approach before seeing ours.</div>
+                <button class="reveal-approach-btn" onclick="revealApproach(this)">Reveal Our Approach</button>
+              </div>
+              <div class="response-content">
               <h4>Suggested Approaches</h4>
               <ul style="color:rgba(255,255,255,0.75);">
                 <li>Build in movement breaks and activity transitions every 15-20 minutes for the whole class</li>
@@ -2041,6 +2635,7 @@
                 <li>Use closed captions and visual aids to support different processing styles</li>
                 <li>Normalize cameras-off breaks &mdash; "Take 2 minutes, stretch, come back ready"</li>
               </ul>
+              </div>
             </div>
           </div>
         </div>
@@ -2068,7 +2663,13 @@
                 <p style="color:rgba(255,255,255,0.8);">Moving forward leaves students behind; going back bores those who are ready. You need to serve both groups.</p>
               </div>
             </div>
-            <div class="scenario-response" style="background:rgba(39,174,96,0.1); border-left-color:var(--green);">
+            <div class="scenario-response hidden-response" style="background:rgba(39,174,96,0.1); border-left-color:var(--green);">
+              <div class="response-overlay">
+                <div class="think-prompt">What would you do?</div>
+                <div class="think-sub">Take a moment to think through your approach before seeing ours.</div>
+                <button class="reveal-approach-btn" onclick="revealApproach(this)">Reveal Our Approach</button>
+              </div>
+              <div class="response-content">
               <h4>Suggested Approaches</h4>
               <ul style="color:rgba(255,255,255,0.75);">
                 <li>Use a quick diagnostic poll or exit ticket to gauge where everyone is</li>
@@ -2078,6 +2679,7 @@
                 <li>Share supplemental review resources in Slack for independent practice</li>
                 <li>Flag to your T&amp;L Manager if the gap is systemic across the cohort</li>
               </ul>
+              </div>
             </div>
           </div>
         </div>
@@ -2105,7 +2707,13 @@
                 <p style="color:rgba(255,255,255,0.8);">You need to rebuild engagement without making it feel forced or punitive.</p>
               </div>
             </div>
-            <div class="scenario-response" style="background:rgba(39,174,96,0.1); border-left-color:var(--green);">
+            <div class="scenario-response hidden-response" style="background:rgba(39,174,96,0.1); border-left-color:var(--green);">
+              <div class="response-overlay">
+                <div class="think-prompt">What would you do?</div>
+                <div class="think-sub">Take a moment to think through your approach before seeing ours.</div>
+                <button class="reveal-approach-btn" onclick="revealApproach(this)">Reveal Our Approach</button>
+              </div>
+              <div class="response-content">
               <h4>Suggested Approaches</h4>
               <ul style="color:rgba(255,255,255,0.75);">
                 <li>Start with a low-stakes warm-up: "Drop your favorite song in chat" or a poll</li>
@@ -2115,6 +2723,7 @@
                 <li>Give private shout-outs via DM to students who participate to build confidence</li>
                 <li>Consider whether the content/pacing needs adjusting based on energy levels</li>
               </ul>
+              </div>
             </div>
           </div>
         </div>
@@ -2541,10 +3150,65 @@
   </div>
 </div>
 
-<!-- ===== 9. QUICK REFERENCE ===== -->
+<!-- ===== 9. YOUR TEACHING PHILOSOPHY (PBL CAPSTONE) ===== -->
+<div class="banner" id="capstone">
+  <div class="banner-inner">
+  <div class="reveal">
+    <div class="section-label" style="color:var(--gold);">09 &mdash; Your Turn</div>
+    <div class="section-title" style="color:#fff;">Build Your Teaching Philosophy</div>
+    <p class="section-desc" style="color:rgba(255,255,255,0.7);">You've explored management styles, boundary frameworks, engagement strategies, and pedagogical approaches. Now synthesize it into something you own &mdash; a Teaching Philosophy page that you can share with your team, your students, and yourself. This is your artifact from today.</p>
+  </div>
+
+  <div class="capstone-layout reveal" style="transition-delay:0.1s">
+    <div class="capstone-brief">
+      <h3>The Brief</h3>
+      <p style="font-size:0.88rem; color:rgba(255,255,255,0.65); line-height:1.6; margin-bottom:20px;">Create a single-page site or document that captures your teaching identity. Include:</p>
+      <ul class="capstone-checklist">
+        <li><strong>Your Management Style</strong> &mdash; Which quadrant do you live in? Which do you aspire to?</li>
+        <li><strong>Your CRT Commitment</strong> &mdash; One specific way you'll center your students' culture</li>
+        <li><strong>Your Back-Pocket Strategies</strong> &mdash; Top 3 engagement tools you'll always have ready</li>
+        <li><strong>Your Boundaries</strong> &mdash; Your personal non-negotiables as an educator</li>
+        <li><strong>A Socratic Question</strong> &mdash; The one question you'll ask yourself before every class</li>
+        <li><strong>Your "Why"</strong> &mdash; Why you teach. What drives you. Who you're doing it for.</li>
+      </ul>
+    </div>
+
+    <div class="capstone-paths">
+      <div class="capstone-path">
+        <div class="path-time">Option A &mdash; 15 min</div>
+        <h4>Google Sites</h4>
+        <p>Use Google Sites to create a clean, shareable page. No coding required. Start from blank, add sections for each checklist item, and share the link with your team.</p>
+        <div style="font-size:0.82rem; color:rgba(255,255,255,0.45);">Go to <strong style="color:rgba(255,255,255,0.7);">sites.google.com</strong> &rarr; Blank Site &rarr; Name it "[Your Name]'s Teaching Philosophy"</div>
+      </div>
+
+      <div class="capstone-path">
+        <div class="path-time">Option B &mdash; 20 min</div>
+        <h4>Vibe Code It with AI</h4>
+        <p>Paste the prompt below into Claude, ChatGPT, or any AI assistant. It will generate a complete HTML page with your philosophy. Open it in a browser and screenshot or host it.</p>
+        <div class="capstone-prompt-box">
+          <button class="copy-prompt-btn" onclick="copyPrompt(this)">Copy</button>Build me a single-page HTML teaching philosophy site. Use a clean, modern design with a dark navy (#291B4B) and gold (#FFC20A) color scheme.
+
+Include these sections:
+- Header with my name and "Teaching Philosophy"
+- My Management Style: [your style]
+- My CRT Commitment: [your commitment]
+- My 3 Back-Pocket Strategies: [your strategies]
+- My Boundaries: [your non-negotiables]
+- My Socratic Question: [your question]
+- My Why: [why you teach]
+
+Make it look professional. Add smooth
+scroll navigation and subtle animations.</div>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+
+<!-- ===== 10. QUICK REFERENCE ===== -->
 <section class="section" id="quickref">
   <div class="reveal">
-    <div class="section-label">09 &mdash; Quick Reference</div>
+    <div class="section-label">10 &mdash; Quick Reference</div>
     <div class="section-title">Your Cheat Sheet</div>
     <p class="section-desc">Key reminders and contacts to keep handy. Print this section or bookmark it for quick access during the program.</p>
   </div>
@@ -2694,13 +3358,74 @@ function toggleScenario(header) {
   card.classList.toggle('open');
 }
 
+// ===== SCENARIO APPROACH REVEAL =====
+function revealApproach(btn) {
+  const response = btn.closest('.scenario-response');
+  response.classList.remove('hidden-response');
+}
+
+// ===== BOUNDARY CLASSIFY =====
+function classifyAnswer(btn, choice) {
+  const card = btn.closest('.classify-card');
+  if (card.classList.contains('answered')) return;
+  const correct = card.dataset.answer;
+  card.querySelectorAll('.classify-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  btn.classList.add(choice);
+  card.classList.add('answered');
+}
+
+// ===== DECISION QUIZ =====
+function decisionQuiz(btn, choice) {
+  const card = btn.closest('.dq-card');
+  if (card.classList.contains('answered')) return;
+  card.querySelectorAll('.dq-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  card.classList.add('answered');
+}
+
+// ===== TOGGLE EXAMPLE =====
+function toggleExample(btn) {
+  const example = btn.nextElementSibling;
+  example.classList.toggle('shown');
+  btn.textContent = example.classList.contains('shown') ? 'Hide example ↑' : btn.textContent.includes('apply') ? 'How would you apply this? ↓' : 'What would you ask? ↓';
+}
+
+// ===== COPY PROMPT =====
+function copyPrompt(btn) {
+  const box = btn.closest('.capstone-prompt-box');
+  const text = box.textContent.replace('Copy', '').trim();
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy', 2000);
+  });
+}
+
 // ===== QUADRANT REVEAL =====
+function claimQuadrant(cell) {
+  // First click: claim this as "mine" and reveal its details
+  if (!cell.classList.contains('claimed')) {
+    // Mark this one as the user's pick
+    cell.classList.add('claimed', 'claimed-mine', 'revealed');
+    // Reveal all others too so they can compare
+    document.querySelectorAll('.quadrant-cell').forEach(c => {
+      c.classList.add('claimed', 'revealed');
+    });
+    // Update the "See All" button
+    const btn = document.querySelector('.quadrant-reveal-all');
+    if (btn) {
+      btn.style.opacity = '0.4';
+      btn.textContent = 'All Styles Revealed';
+      btn.style.pointerEvents = 'none';
+    }
+  }
+}
 function toggleQuadrant(cell) {
   cell.classList.toggle('revealed');
   checkAllRevealed();
 }
 function revealAllQuadrants() {
-  document.querySelectorAll('.quadrant-cell').forEach(c => c.classList.add('revealed'));
+  document.querySelectorAll('.quadrant-cell').forEach(c => c.classList.add('revealed', 'claimed'));
   checkAllRevealed();
 }
 function checkAllRevealed() {
