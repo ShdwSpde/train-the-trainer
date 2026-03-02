@@ -1,0 +1,2287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Train the Trainer — The Knowledge House</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #291B4B;
+    --deep: #1E1338;
+    --blue: #3D2B6B;
+    --gold: #FFC20A;
+    --gold-dark: #D4A017;
+    --green: #27ae60;
+    --green-light: #e8f8f0;
+    --teal: #1abc9c;
+    --purple: #8e44ad;
+    --orange: #e67e22;
+    --orange-light: #fef4e8;
+    --red: #e74c3c;
+    --red-light: #fdeaea;
+    --yellow: #f1c40f;
+    --yellow-light: #fef9e7;
+    --light: #F5F3F9;
+    --g50: #FAF9FC;
+    --g100: #EEEDF5;
+    --g200: #DDD9EA;
+    --g300: #C4BDDA;
+    --g400: #9A92B4;
+    --g500: #7B7394;
+    --g700: #3D3560;
+    --radius: 14px;
+    --radius-sm: 8px;
+    --shadow: 0 4px 24px rgba(41,27,75,0.07);
+    --shadow-md: 0 8px 32px rgba(41,27,75,0.1);
+    --shadow-lg: 0 16px 56px rgba(41,27,75,0.12);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Lato', -apple-system, sans-serif;
+    background: var(--light);
+    color: var(--navy);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ===== NAV ===== */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: rgba(41,27,75,0.97);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+  }
+  nav.hidden { transform: translateY(-100%); }
+
+  .nav-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    height: 64px;
+    gap: 24px;
+  }
+
+  .nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    flex-shrink: 0;
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+  }
+  .nav-brand svg { height: 28px; width: auto; }
+
+  .nav-links {
+    display: flex;
+    gap: 2px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    flex: 1;
+    justify-content: flex-end;
+  }
+  .nav-links::-webkit-scrollbar { display: none; }
+  .nav-links a {
+    color: rgba(255,255,255,0.4);
+    text-decoration: none;
+    font-size: 0.62rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+    transition: all 0.25s;
+  }
+  .nav-links a:hover, .nav-links a.active {
+    color: #fff;
+    background: rgba(255,194,10,0.15);
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    min-height: 100vh;
+    background: var(--navy);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 120px 40px 100px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+  .hero-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.5;
+    animation: float 20s ease-in-out infinite;
+  }
+  .hero-orb-1 {
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(255,194,10,0.25), transparent 70%);
+    top: -20%; right: -10%;
+  }
+  .hero-orb-2 {
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(61,43,107,0.4), transparent 70%);
+    bottom: -15%; left: -8%;
+    animation-delay: -7s;
+  }
+  .hero-orb-3 {
+    width: 350px; height: 350px;
+    background: radial-gradient(circle, rgba(142,68,173,0.2), transparent 70%);
+    top: 20%; left: 30%;
+    animation-delay: -14s;
+  }
+  @keyframes float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(30px, -20px) scale(1.05); }
+    66% { transform: translate(-20px, 15px) scale(0.95); }
+  }
+
+  .hero-grid-overlay {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  .hero-content { position: relative; z-index: 2; max-width: 900px; }
+
+  .hero-org {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    justify-content: center;
+  }
+  .hero-org::before, .hero-org::after {
+    content: '';
+    width: 40px;
+    height: 1px;
+    background: rgba(255,255,255,0.15);
+  }
+
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.8rem, 6.5vw, 5rem);
+    font-weight: 400;
+    line-height: 1.08;
+    letter-spacing: -1px;
+    margin-bottom: 28px;
+  }
+  .hero h1 .accent { color: var(--gold); }
+
+  .hero-sub {
+    font-size: 1.15rem;
+    font-weight: 300;
+    color: rgba(255,255,255,0.55);
+    max-width: 640px;
+    line-height: 1.8;
+    margin: 0 auto 48px;
+  }
+
+  .hero-quote {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 1.3rem;
+    color: var(--gold);
+    opacity: 0.8;
+    max-width: 500px;
+    margin: 0 auto 48px;
+    position: relative;
+    padding: 0 32px;
+  }
+  .hero-quote::before {
+    content: '\201C';
+    position: absolute;
+    left: 0;
+    top: -10px;
+    font-size: 3rem;
+    color: var(--gold);
+    opacity: 0.4;
+    font-family: 'DM Serif Display', serif;
+  }
+
+  .hero-locations {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .hero-locations span {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.25);
+  }
+
+  .scroll-cue {
+    position: absolute;
+    bottom: 36px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .scroll-cue span {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: rgba(255,255,255,0.2);
+  }
+  .scroll-line {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    animation: scroll-pulse 2s ease-in-out infinite;
+  }
+  @keyframes scroll-pulse {
+    0%, 100% { opacity: 0.3; transform: scaleY(0.6); }
+    50% { opacity: 1; transform: scaleY(1); }
+  }
+
+  /* ===== SECTIONS ===== */
+  .section {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 100px 40px;
+  }
+  .section-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    color: var(--g400);
+    margin-bottom: 10px;
+  }
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 400;
+    line-height: 1.15;
+    letter-spacing: -0.5px;
+    margin-bottom: 16px;
+    color: var(--navy);
+  }
+  .section-desc {
+    font-size: 1.05rem;
+    color: var(--g500);
+    max-width: 640px;
+    line-height: 1.75;
+    margin-bottom: 48px;
+  }
+
+  /* ===== REVEAL ANIMATIONS ===== */
+  .reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.8s cubic-bezier(0.4,0,0.2,1), transform 0.8s cubic-bezier(0.4,0,0.2,1);
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ===== FULL-WIDTH BANNERS ===== */
+  .banner {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--deep) 50%, var(--blue) 100%);
+    color: #fff;
+    padding: 100px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .banner::before {
+    content: '';
+    position: absolute;
+    top: -30%;
+    right: -10%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(255,194,10,0.08), transparent 70%);
+    border-radius: 50%;
+  }
+  .banner .section-title { color: #fff; }
+  .banner .section-label { color: var(--gold); opacity: 0.7; }
+  .banner .section-desc { color: rgba(255,255,255,0.55); }
+  .banner-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ===== CARD SYSTEM ===== */
+  .card-grid {
+    display: grid;
+    gap: 24px;
+  }
+  .card-grid-2 { grid-template-columns: repeat(2, 1fr); }
+  .card-grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .card-grid-4 { grid-template-columns: repeat(4, 1fr); }
+  .card-grid-5 { grid-template-columns: repeat(5, 1fr); }
+
+  .card {
+    background: #fff;
+    border-radius: var(--radius);
+    padding: 32px 28px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--g200);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .card-accent-top {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+  }
+
+  .card-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    margin-bottom: 16px;
+  }
+
+  .card h3 {
+    font-family: 'Lato', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--navy);
+  }
+  .card p, .card li {
+    font-size: 0.88rem;
+    color: var(--g500);
+    line-height: 1.65;
+  }
+  .card ul {
+    list-style: none;
+    margin-top: 12px;
+  }
+  .card ul li {
+    padding: 4px 0;
+    padding-left: 18px;
+    position: relative;
+  }
+  .card ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 12px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--g300);
+  }
+
+  /* ===== STAT CARDS ===== */
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    margin-bottom: 48px;
+  }
+  .stat-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    text-align: center;
+  }
+  .stat-card .num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.8rem;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .stat-card .label {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.4;
+  }
+
+  /* ===== QUADRANT ===== */
+  .quadrant-container {
+    max-width: 800px;
+    margin: 0 auto 48px;
+  }
+  .quadrant {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3px;
+    background: var(--g200);
+    border-radius: var(--radius);
+    overflow: hidden;
+    position: relative;
+  }
+  .quadrant::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--g200);
+    z-index: 1;
+  }
+  .quadrant::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--g200);
+    z-index: 1;
+  }
+
+  .quadrant-cell {
+    background: #fff;
+    padding: 32px 28px;
+    position: relative;
+  }
+  .quadrant-cell h4 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.3rem;
+    margin-bottom: 4px;
+    color: var(--navy);
+  }
+  .quadrant-cell .q-quote {
+    font-style: italic;
+    font-size: 0.82rem;
+    color: var(--g400);
+    margin-bottom: 12px;
+  }
+  .quadrant-cell ul {
+    list-style: none;
+  }
+  .quadrant-cell ul li {
+    font-size: 0.82rem;
+    color: var(--g500);
+    padding: 2px 0 2px 16px;
+    position: relative;
+  }
+  .quadrant-cell ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+  }
+  .q-authoritative { border-top: 4px solid var(--green); }
+  .q-authoritative h4 { color: var(--green); }
+  .q-authoritative ul li::before { background: var(--green); }
+
+  .q-permissive { border-top: 4px solid var(--gold); }
+  .q-permissive h4 { color: var(--gold-dark); }
+  .q-permissive ul li::before { background: var(--gold); }
+
+  .q-authoritarian { border-bottom: 4px solid var(--red); }
+  .q-authoritarian h4 { color: var(--red); }
+  .q-authoritarian ul li::before { background: var(--red); }
+
+  .q-uninvolved { border-bottom: 4px solid var(--g400); }
+  .q-uninvolved h4 { color: var(--g400); }
+  .q-uninvolved ul li::before { background: var(--g400); }
+
+  .quadrant-labels {
+    display: flex;
+    justify-content: space-between;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 12px 0 0;
+  }
+  .quadrant-labels span {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--g400);
+  }
+
+  .axis-label {
+    text-align: center;
+    margin-bottom: 12px;
+  }
+  .axis-label span {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--g400);
+    background: var(--g100);
+    padding: 4px 16px;
+    border-radius: 20px;
+  }
+
+  /* ===== TRAFFIC LIGHT FRAMEWORK ===== */
+  .framework-section {
+    margin-bottom: 48px;
+  }
+  .framework-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--g100);
+  }
+  .framework-dot {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .framework-dot.green { background: var(--green); box-shadow: 0 0 16px rgba(39,174,96,0.3); }
+  .framework-dot.yellow { background: var(--yellow); box-shadow: 0 0 16px rgba(241,196,15,0.3); }
+  .framework-dot.red { background: var(--red); box-shadow: 0 0 16px rgba(231,76,60,0.3); }
+
+  .framework-header h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.5rem;
+  }
+  .framework-header .framework-subtitle {
+    font-size: 0.85rem;
+    color: var(--g500);
+    font-weight: 400;
+  }
+
+  .framework-items {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  .framework-item {
+    background: #fff;
+    border-radius: var(--radius-sm);
+    padding: 20px;
+    border: 1px solid var(--g200);
+    transition: transform 0.2s;
+  }
+  .framework-item:hover { transform: translateX(4px); }
+  .framework-item h4 {
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--navy);
+  }
+  .framework-item p {
+    font-size: 0.82rem;
+    color: var(--g500);
+    line-height: 1.55;
+  }
+  .framework-item.green-item { border-left: 4px solid var(--green); }
+  .framework-item.yellow-item { border-left: 4px solid var(--yellow); }
+  .framework-item.red-item { border-left: 4px solid var(--red); }
+
+  /* ===== SCENARIO CARDS ===== */
+  .scenario-card {
+    background: #fff;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--g200);
+    margin-bottom: 24px;
+  }
+  .scenario-header {
+    background: var(--navy);
+    color: #fff;
+    padding: 24px 28px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.3s;
+  }
+  .scenario-header:hover { background: var(--blue); }
+  .scenario-header h3 {
+    font-family: 'Lato', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+  .scenario-header .scenario-num {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+  .scenario-toggle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 1.2rem;
+    transition: transform 0.3s, background 0.3s;
+    flex-shrink: 0;
+  }
+  .scenario-card.open .scenario-toggle {
+    transform: rotate(45deg);
+    background: rgba(255,194,10,0.2);
+  }
+  .scenario-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s cubic-bezier(0.4,0,0.2,1);
+  }
+  .scenario-card.open .scenario-body { max-height: 800px; }
+  .scenario-body-inner {
+    padding: 28px;
+  }
+  .scenario-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+  .scenario-block {
+    background: var(--g50);
+    border-radius: var(--radius-sm);
+    padding: 20px;
+  }
+  .scenario-block h4 {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--g400);
+    margin-bottom: 8px;
+  }
+  .scenario-block p {
+    font-size: 0.92rem;
+    color: var(--navy);
+    line-height: 1.6;
+  }
+  .scenario-response {
+    background: linear-gradient(135deg, var(--green-light), #f0faf4);
+    border-left: 4px solid var(--green);
+    border-radius: var(--radius-sm);
+    padding: 20px;
+  }
+  .scenario-response h4 {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--green);
+    margin-bottom: 8px;
+  }
+  .scenario-response p, .scenario-response li {
+    font-size: 0.88rem;
+    color: var(--navy);
+    line-height: 1.6;
+  }
+  .scenario-response ul {
+    list-style: none;
+    margin-top: 8px;
+  }
+  .scenario-response ul li {
+    padding: 3px 0 3px 20px;
+    position: relative;
+  }
+  .scenario-response ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 11px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--green);
+    opacity: 0.4;
+  }
+
+  /* ===== TOOLKIT CARDS ===== */
+  .toolkit-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+  .toolkit-card {
+    background: #fff;
+    border-radius: var(--radius);
+    padding: 0;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--g200);
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .toolkit-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+  }
+  .toolkit-card-header {
+    padding: 24px 28px 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    border-bottom: 1px solid var(--g100);
+  }
+  .toolkit-emoji {
+    font-size: 2rem;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .toolkit-card-header h3 {
+    font-family: 'Lato', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 4px;
+  }
+  .toolkit-card-header p {
+    font-size: 0.82rem;
+    color: var(--g500);
+    line-height: 1.5;
+  }
+  .toolkit-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    border-top: 1px solid var(--g100);
+  }
+  .toolkit-meta-item {
+    padding: 14px 20px;
+    border-right: 1px solid var(--g100);
+  }
+  .toolkit-meta-item:last-child { border-right: none; }
+  .toolkit-meta-label {
+    font-size: 0.62rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--g400);
+    margin-bottom: 2px;
+  }
+  .toolkit-meta-value {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--navy);
+  }
+  .toolkit-steps {
+    padding: 20px 28px 24px;
+  }
+  .toolkit-steps h4 {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--g400);
+    margin-bottom: 10px;
+  }
+  .toolkit-steps ol {
+    list-style: none;
+    counter-reset: steps;
+  }
+  .toolkit-steps ol li {
+    counter-increment: steps;
+    font-size: 0.85rem;
+    color: var(--g500);
+    padding: 4px 0 4px 28px;
+    position: relative;
+    line-height: 1.5;
+  }
+  .toolkit-steps ol li::before {
+    content: counter(steps);
+    position: absolute;
+    left: 0;
+    top: 4px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--g100);
+    color: var(--navy);
+    font-size: 0.68rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ===== BOUNDARIES GRID ===== */
+  .boundary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .boundary-card {
+    background: #fff;
+    border-radius: var(--radius-sm);
+    padding: 20px;
+    border: 1px solid var(--g200);
+    font-size: 0.88rem;
+    color: var(--navy);
+    line-height: 1.55;
+    transition: transform 0.2s;
+  }
+  .boundary-card:hover { transform: scale(1.02); }
+  .boundary-type-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+  }
+  .boundary-type-label.physical { background: #fdeaea; color: var(--red); }
+  .boundary-type-label.verbal { background: #e8f0fd; color: #2c5aa0; }
+  .boundary-type-label.tech { background: #e8f4fd; color: var(--teal); }
+
+  /* ===== RESOURCE LINKS ===== */
+  .resource-category {
+    margin-bottom: 40px;
+  }
+  .resource-category h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.3rem;
+    color: var(--navy);
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--g100);
+  }
+  .resource-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  .resource-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    color: var(--navy);
+    font-size: 0.88rem;
+    transition: background 0.2s;
+    border: 1px solid transparent;
+  }
+  .resource-link:hover {
+    background: #fff;
+    border-color: var(--g200);
+  }
+  .resource-link::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--gold);
+    flex-shrink: 0;
+  }
+
+  /* ===== QUICK REFERENCE ===== */
+  .qr-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .qr-card {
+    background: #fff;
+    border-radius: var(--radius);
+    padding: 32px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--g200);
+  }
+  .qr-card h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.25rem;
+    color: var(--navy);
+    margin-bottom: 16px;
+  }
+  .qr-card p, .qr-card li {
+    font-size: 0.88rem;
+    color: var(--g500);
+    line-height: 1.65;
+  }
+
+  /* ===== INQUIRY CARDS ===== */
+  .inquiry-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-top: 48px;
+  }
+  .inquiry-card {
+    background: #fff;
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    text-align: center;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--g200);
+    position: relative;
+    overflow: hidden;
+  }
+  .inquiry-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+  }
+  .inquiry-card:nth-child(1)::before { background: var(--navy); }
+  .inquiry-card:nth-child(2)::before { background: var(--blue); }
+  .inquiry-card:nth-child(3)::before { background: var(--purple); }
+  .inquiry-card:nth-child(4)::before { background: var(--gold); }
+
+  .inquiry-card .inquiry-depth {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--g400);
+    margin-bottom: 8px;
+  }
+  .inquiry-card h4 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.15rem;
+    color: var(--navy);
+    margin-bottom: 10px;
+  }
+  .inquiry-card p {
+    font-size: 0.82rem;
+    color: var(--g500);
+    line-height: 1.55;
+  }
+
+  /* ===== VALUES PILLS ===== */
+  .values-row {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 48px;
+    flex-wrap: wrap;
+  }
+  .value-pill {
+    flex: 1;
+    min-width: 200px;
+    background: #fff;
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--g200);
+  }
+  .value-pill h4 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.15rem;
+    color: var(--navy);
+    margin-bottom: 8px;
+  }
+  .value-pill p {
+    font-size: 0.85rem;
+    color: var(--g500);
+    line-height: 1.6;
+  }
+
+  /* ===== COMPETENCE BAR ===== */
+  .competence-bar {
+    display: flex;
+    gap: 3px;
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 48px;
+  }
+  .competence-item {
+    flex: 1;
+    padding: 24px 16px;
+    text-align: center;
+    color: #fff;
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .competence-item h4 {
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+  .competence-item p {
+    font-size: 0.75rem;
+    opacity: 0.8;
+    line-height: 1.4;
+  }
+
+  /* ===== FOOTER ===== */
+  footer {
+    background: var(--deep);
+    color: rgba(255,255,255,0.4);
+    padding: 48px 40px;
+    text-align: center;
+    font-size: 0.82rem;
+  }
+  footer a {
+    color: var(--gold);
+    text-decoration: none;
+  }
+  footer .footer-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  footer p { margin-bottom: 8px; }
+
+  /* ===== PRINT STYLES ===== */
+  @media print {
+    nav { display: none; }
+    .hero { min-height: auto; padding: 40px; }
+    .section { padding: 40px; }
+    .banner { padding: 40px; }
+    .reveal { opacity: 1 !important; transform: none !important; }
+    .scenario-body { max-height: none !important; }
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 1024px) {
+    .card-grid-4, .card-grid-5, .inquiry-grid { grid-template-columns: repeat(2, 1fr); }
+    .stat-row { grid-template-columns: repeat(2, 1fr); }
+    .toolkit-grid { grid-template-columns: 1fr; }
+    .framework-items { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 768px) {
+    .nav-inner { padding: 0 20px; gap: 16px; }
+    .nav-links a { font-size: 0.58rem; padding: 5px 8px; }
+    .hero { padding: 100px 24px 80px; }
+    .hero h1 { font-size: 2.2rem; letter-spacing: 0; }
+    .section { padding: 60px 24px; }
+    .banner { padding: 60px 24px; }
+    .card-grid-2, .card-grid-3, .card-grid-4, .card-grid-5 { grid-template-columns: 1fr; }
+    .quadrant { grid-template-columns: 1fr; }
+    .boundary-grid { grid-template-columns: 1fr; }
+    .stat-row { grid-template-columns: 1fr; }
+    .toolkit-grid { grid-template-columns: 1fr; }
+    .toolkit-meta { grid-template-columns: 1fr; }
+    .toolkit-meta-item { border-right: none; border-bottom: 1px solid var(--g100); }
+    .resource-list { grid-template-columns: 1fr; }
+    .qr-grid { grid-template-columns: 1fr; }
+    .competence-bar { flex-direction: column; }
+    .inquiry-grid { grid-template-columns: 1fr; }
+    .scenario-grid { grid-template-columns: 1fr; }
+    .values-row { flex-direction: column; }
+    .hero-locations { gap: 12px; }
+    .framework-items { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== NAV ===== -->
+<nav id="mainNav">
+  <div class="nav-inner">
+    <a class="nav-brand" href="#hero">
+      <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" height="28">
+        <path d="M20 2L4 16v20h12V26h8v10h12V16L20 2z" fill="white" opacity="0.9"/>
+        <circle cx="20" cy="18" r="4" fill="#291B4B" opacity="0.6"/>
+        <rect x="18" y="14" width="4" height="8" rx="2" fill="#291B4B" opacity="0.4"/>
+      </svg>
+      TKH Train the Trainer
+    </a>
+    <div class="nav-links">
+      <a href="#welcome">Welcome</a>
+      <a href="#pedagogy">Pedagogy</a>
+      <a href="#management">Management</a>
+      <a href="#boundaries">Boundaries</a>
+      <a href="#framework">Decisions</a>
+      <a href="#scenarios">Scenarios</a>
+      <a href="#toolkit">Toolkit</a>
+      <a href="#resources">Resources</a>
+      <a href="#quickref">Reference</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="hero">
+  <div class="hero-bg">
+    <div class="hero-orb hero-orb-1"></div>
+    <div class="hero-orb hero-orb-2"></div>
+    <div class="hero-orb hero-orb-3"></div>
+    <div class="hero-grid-overlay"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-org">The Knowledge House</div>
+    <h1>Train the <span class="accent">Trainer</span></h1>
+    <p class="hero-sub">Equipping Digital Equity Stewards with classroom management strategies, decision-making frameworks, and engagement tools for the virtual learning environment.</p>
+    <div class="hero-quote">Students don't care how much you know until they know how much you care.</div>
+    <div class="hero-locations">
+      <span>New York</span>
+      <span>Newark</span>
+      <span>Atlanta</span>
+      <span>Los Angeles</span>
+      <span>Washington D.C.</span>
+    </div>
+  </div>
+  <div class="scroll-cue">
+    <span>Explore</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ===== 1. WELCOME / MISSION ===== -->
+<section class="section" id="welcome">
+  <div class="reveal">
+    <div class="section-label">01 &mdash; Welcome</div>
+    <div class="section-title">Welcome, Servant Leaders</div>
+    <p class="section-desc">Welcome to The Knowledge House, where we don't just teach technology; we inspire change and bridge the digital divide with every lesson we impart. You are not just educators; you are servant leaders who play a pivotal role in shaping the future of our students and the broader tech landscape.</p>
+  </div>
+
+  <div class="card-grid card-grid-3 reveal" style="transition-delay:0.15s">
+    <div class="card">
+      <div class="card-accent-top" style="background: var(--gold)"></div>
+      <div class="card-icon" style="background: rgba(255,194,10,0.15); color: var(--gold-dark);">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      </div>
+      <h3>Our Mission</h3>
+      <p>We inspire change and bridge the digital divide by making technology accessible and understandable for all. Together, we are nurturing leaders, innovators, and dreamers.</p>
+    </div>
+    <div class="card">
+      <div class="card-accent-top" style="background: var(--green)"></div>
+      <div class="card-icon" style="background: rgba(39,174,96,0.15); color: var(--green);">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </div>
+      <h3>Your Role</h3>
+      <p>Teaching is your superpower. You are at the heart of our efforts to make technology accessible. This training equips you with strategies and frameworks to do that work effectively.</p>
+    </div>
+    <div class="card">
+      <div class="card-accent-top" style="background: var(--purple)"></div>
+      <div class="card-icon" style="background: rgba(142,68,173,0.15); color: var(--purple);">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      </div>
+      <h3>Today's Goals</h3>
+      <ul>
+        <li>Explore classroom management styles</li>
+        <li>Understand healthy boundaries</li>
+        <li>Practice common scenario responses</li>
+        <li>Build your virtual engagement toolkit</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 2. PEDAGOGY & VALUES ===== -->
+<div class="banner" id="pedagogy">
+  <div class="banner-inner">
+    <div class="reveal">
+      <div class="section-label">02 &mdash; Pedagogy &amp; Values</div>
+      <div class="section-title">Our Role in Tech Education</div>
+      <p class="section-desc">Based off the data, the next few years promise amazing opportunities. By focusing on creating an inclusive environment for learners to thrive in, we create a unique value proposition by offering culturally relevant pedagogy and technical competency.</p>
+    </div>
+
+    <div class="stat-row reveal" style="transition-delay:0.1s">
+      <div class="stat-card">
+        <div class="num">33%</div>
+        <div class="label">of CS teachers are the only CS teacher at their school</div>
+      </div>
+      <div class="stat-card">
+        <div class="num">81%</div>
+        <div class="label">of teachers felt they influenced growth of CS in their district</div>
+      </div>
+      <div class="stat-card">
+        <div class="num">71%</div>
+        <div class="label">of CS teachers seek PD for equitable &amp; inclusive classrooms</div>
+      </div>
+      <div class="stat-card">
+        <div class="num">69%</div>
+        <div class="label">felt issues of oppression should be covered in CS classrooms</div>
+      </div>
+    </div>
+
+    <div class="reveal" style="transition-delay:0.2s">
+      <h3 style="color:#fff; font-family:'DM Serif Display',serif; font-size:1.4rem; margin-bottom:16px;">Competence Framework</h3>
+    </div>
+    <div class="competence-bar reveal" style="transition-delay:0.25s">
+      <div class="competence-item" style="background: var(--red);">
+        <h4>Mental</h4>
+        <p>Ability to think critically and creatively</p>
+      </div>
+      <div class="competence-item" style="background: var(--orange);">
+        <h4>Social</h4>
+        <p>Ability to interact with others</p>
+      </div>
+      <div class="competence-item" style="background: var(--purple);">
+        <h4>Educational</h4>
+        <p>Skills, attitudes, and behaviors in classrooms</p>
+      </div>
+      <div class="competence-item" style="background: var(--blue);">
+        <h4>Vocational</h4>
+        <p>Exploring career options and work habits</p>
+      </div>
+      <div class="competence-item" style="background: var(--gold-dark);">
+        <h4>Cultural</h4>
+        <p>Understanding how culture is expressed</p>
+      </div>
+    </div>
+
+    <div class="values-row reveal" style="transition-delay:0.3s">
+      <div class="value-pill" style="background:rgba(255,255,255,0.06); border-color:rgba(255,255,255,0.08);">
+        <h4 style="color: var(--gold);">Diversity is Be-You-Tiful</h4>
+        <p style="color:rgba(255,255,255,0.55);">Our team mirrors the world our students inhabit. Authentic representation fosters connections, making students feel seen and valued.</p>
+      </div>
+      <div class="value-pill" style="background:rgba(255,255,255,0.06); border-color:rgba(255,255,255,0.08);">
+        <h4 style="color: var(--gold);">Radical Candor</h4>
+        <p style="color:rgba(255,255,255,0.55);">Blending caring personally with challenging directly to foster an environment ripe for growth. Constructive criticism that strengthens our bond.</p>
+      </div>
+      <div class="value-pill" style="background:rgba(255,255,255,0.06); border-color:rgba(255,255,255,0.08);">
+        <h4 style="color: var(--gold);">Culture of Learning</h4>
+        <p style="color:rgba(255,255,255,0.55);">We refine our pedagogical methods constantly, encouraging educators to experiment and evolve instructional strategies.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 3. CLASSROOM MANAGEMENT ===== -->
+<section class="section" id="management">
+  <div class="reveal">
+    <div class="section-label">03 &mdash; Classroom Management</div>
+    <div class="section-title">Locate Yourself on the Chart</div>
+    <p class="section-desc">Every educator has a natural management style. Understanding where you fall helps you intentionally shift toward the most effective approach for your learners. There's no wrong answer &mdash; just awareness.</p>
+  </div>
+
+  <div class="axis-label reveal" style="transition-delay:0.1s">
+    <span>High Responsiveness</span>
+  </div>
+  <div class="quadrant-container reveal" style="transition-delay:0.15s">
+    <div class="quadrant">
+      <div class="quadrant-cell q-permissive">
+        <h4>Permissive</h4>
+        <div class="q-quote">"Whatever you want!"</div>
+        <ul>
+          <li>Low expectations</li>
+          <li>Few rules</li>
+          <li>Indulgent &amp; accepting</li>
+          <li>Avoids confrontation</li>
+          <li>Warm</li>
+        </ul>
+      </div>
+      <div class="quadrant-cell q-authoritative">
+        <h4>Authoritative</h4>
+        <div class="q-quote">"Let's discuss this."</div>
+        <ul>
+          <li>High expectations</li>
+          <li>Clear standards</li>
+          <li>Assertive &amp; democratic</li>
+          <li>Flexible &amp; responsive</li>
+          <li>Warm</li>
+        </ul>
+      </div>
+      <div class="quadrant-cell q-uninvolved">
+        <h4>Uninvolved</h4>
+        <div class="q-quote">"I really don't care."</div>
+        <ul>
+          <li>No expectations</li>
+          <li>Few rules</li>
+          <li>Absent &amp; passive</li>
+          <li>Neglectful</li>
+          <li>Competing priorities</li>
+        </ul>
+      </div>
+      <div class="quadrant-cell q-authoritarian">
+        <h4>Authoritarian</h4>
+        <div class="q-quote">"Because I said so!"</div>
+        <ul>
+          <li>High expectations</li>
+          <li>Clear rules</li>
+          <li>Forceful &amp; autocratic</li>
+          <li>Rigid</li>
+          <li>Limited warmth</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="quadrant-labels reveal" style="transition-delay:0.2s">
+    <span>Low Demandingness</span>
+    <span>High Demandingness</span>
+  </div>
+
+  <div class="reveal" style="margin-top:64px; transition-delay:0.25s">
+    <div class="section-label" style="margin-bottom:8px;">Types of Student Inquiry</div>
+    <div class="section-title" style="font-size:clamp(1.5rem,3vw,2.2rem);">How Deep Should Students Go?</div>
+    <p class="section-desc">Match your inquiry approach to where your students are in their learning journey.</p>
+  </div>
+
+  <div class="inquiry-grid reveal" style="transition-delay:0.3s">
+    <div class="inquiry-card">
+      <div class="inquiry-depth">Most guided</div>
+      <h4>Structured Inquiry</h4>
+      <p>Students follow the lead of the teacher as the entire class engages in one inquiry together.</p>
+    </div>
+    <div class="inquiry-card">
+      <div class="inquiry-depth">Teacher-led</div>
+      <h4>Controlled Inquiry</h4>
+      <p>Teacher chooses topics and identifies the resources students will use to answer questions.</p>
+    </div>
+    <div class="inquiry-card">
+      <div class="inquiry-depth">Student-directed</div>
+      <h4>Guided Inquiry</h4>
+      <p>Teacher chooses topics/questions and students design product or solution.</p>
+    </div>
+    <div class="inquiry-card">
+      <div class="inquiry-depth">Most autonomous</div>
+      <h4>Free Inquiry</h4>
+      <p>Students choose their topics without reference to any prescribed outcome.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 4. BOUNDARIES ===== -->
+<div class="banner" id="boundaries">
+  <div class="banner-inner">
+    <div class="reveal">
+      <div class="section-label">04 &mdash; Boundaries</div>
+      <div class="section-title">Healthy Boundaries for Educators</div>
+      <p class="section-desc">Maintaining professional boundaries protects both you and your students. Check with your supervisor for any organization-specific policies.</p>
+    </div>
+
+    <div class="reveal" style="transition-delay:0.1s">
+      <div class="boundary-type-label physical" style="background:rgba(231,76,60,0.15); color:#ff7b6b;">Physical Boundaries</div>
+    </div>
+    <div class="boundary-grid reveal" style="transition-delay:0.15s">
+      <div class="boundary-card" style="background:rgba(255,255,255,0.06); border-color:rgba(255,255,255,0.08); color:rgba(255,255,255,0.8);">
+        Physical contact with students is strongly discouraged.
+      </div>
+      <div class="boundary-card" style="background:rgba(255,255,255,0.06); border-color:rgba(255,255,255,0.08); color:rgba(255,255,255,0.8);">
+        One on one &mdash; avoid situations where you are alone with a child.
+      </div>
+      <div class="boundary-card" style="background:rgba(255,255,255,0.06); border-color:rgba(255,255,255,0.08); color:rgba(255,255,255,0.8);">
+        What about hugs? Do not initiate touch. Attempt a side hug rather than a front-to-front hug.
+      </div>
+    </div>
+
+    <div class="reveal" style="transition-delay:0.2s">
+      <div class="boundary-type-label verbal" style="background:rgba(44,90,160,0.15); color:#8bb4e8;">Verbal Boundaries</div>
+    </div>
+    <div class="boundary-grid reveal" style="transition-delay:0.25s">
+      <div class="boundary-card" style="background:rgba(255,255,255,0.06); border-color:rgba(255,255,255,0.08); color:rgba(255,255,255,0.8);">
+        No secrets. If a student discloses something that impacts their health and safety, you are required to share that with your supervisor.
+      </div>
+      <div class="boundary-card" style="background:rgba(255,255,255,0.06); border-color:rgba(255,255,255,0.08); color:rgba(255,255,255,0.8);">
+        Stick to age-appropriate topics.
+      </div>
+      <div class="boundary-card" style="background:rgba(255,255,255,0.06); border-color:rgba(255,255,255,0.08); color:rgba(255,255,255,0.8);">
+        You don't have to know everything. Redirect, and either commit to finding out together or explain you are not comfortable discussing the topic.
+      </div>
+    </div>
+
+    <div class="reveal" style="transition-delay:0.3s">
+      <div class="boundary-type-label tech" style="background:rgba(26,188,156,0.15); color:#5ed4bd;">Technological Boundaries</div>
+    </div>
+    <div class="boundary-grid reveal" style="transition-delay:0.35s">
+      <div class="boundary-card" style="background:rgba(255,255,255,0.06); border-color:rgba(255,255,255,0.08); color:rgba(255,255,255,0.8);">
+        Do not give out your personal email or cell number to students. Use work accounts for program reminders, updates, etc.
+      </div>
+      <div class="boundary-card" style="background:rgba(255,255,255,0.06); border-color:rgba(255,255,255,0.08); color:rgba(255,255,255,0.8);">
+        Do not accept requests to follow or friend them on social media.
+      </div>
+      <div class="boundary-card" style="background:rgba(255,255,255,0.06); border-color:rgba(255,255,255,0.08); color:rgba(255,255,255,0.8);">
+        Ideally there is a digital boundaries component to the organizational policies/code of conduct.
+      </div>
+    </div>
+
+    <div class="reveal" style="margin-top:48px; transition-delay:0.4s">
+      <div style="background:rgba(255,194,10,0.1); border:1px solid rgba(255,194,10,0.2); border-radius:var(--radius); padding:28px 32px; max-width:700px;">
+        <h3 style="font-family:'DM Serif Display',serif; font-size:1.5rem; color:var(--gold); margin-bottom:8px;">QTIP: Quit Taking It Personally!</h3>
+        <p style="color:rgba(255,255,255,0.6); font-size:0.92rem; line-height:1.7;">Behaviors that students display are not because they are actively trying to challenge you. Children are learning and testing what works, and developing social skills to navigate life. Sometimes testing us is part of that. Take a deep breath. It's not personal!</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 5. DECISION MAKING FRAMEWORK ===== -->
+<section class="section" id="framework">
+  <div class="reveal">
+    <div class="section-label">05 &mdash; Decision Making</div>
+    <div class="section-title">The Red, Yellow, Green Framework</div>
+    <p class="section-desc">This framework outlines three levels of decision-making authority. Think of it like a traffic light for your ideas and changes. It's designed not to restrict you, but to empower you.</p>
+  </div>
+
+  <div class="framework-section reveal" style="transition-delay:0.1s">
+    <div class="framework-header">
+      <div class="framework-dot green"></div>
+      <div>
+        <h3 style="color:var(--green);">Green Light: Go For It!</h3>
+        <div class="framework-subtitle">Your Agency Zone &mdash; Full autonomy, no approval needed</div>
+      </div>
+    </div>
+    <div class="framework-items">
+      <div class="framework-item green-item">
+        <h4>Modify Presentation Content</h4>
+        <p>Swap out images to make them more relevant, culturally responsive, or engaging for your cohort.</p>
+      </div>
+      <div class="framework-item green-item">
+        <h4>Modify Presenter Notes</h4>
+        <p>Adapt notes to fit your personal teaching style, add your own anecdotes or reminders.</p>
+      </div>
+      <div class="framework-item green-item">
+        <h4>Modify Facilitation Guides</h4>
+        <p>Adjust timing or flow of a lesson within the allotted class time to respond to student needs.</p>
+      </div>
+      <div class="framework-item green-item">
+        <h4>Adjust Lesson Delivery</h4>
+        <p>Skip non-essential slides if you've covered a concept well or are short on time.</p>
+      </div>
+      <div class="framework-item green-item">
+        <h4>Enhance Student Engagement</h4>
+        <p>Introduce polls, think-pair-share, breakout rooms, or other interactive elements.</p>
+      </div>
+      <div class="framework-item green-item">
+        <h4>Select Additional Resources</h4>
+        <p>Share relevant articles, videos, tutorials, or blog posts to supplement the core curriculum.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="framework-section reveal" style="transition-delay:0.2s">
+    <div class="framework-header">
+      <div class="framework-dot yellow"></div>
+      <div>
+        <h3 style="color:var(--gold-dark);">Yellow Light: Proceed with Guardrails</h3>
+        <div class="framework-subtitle">Limited Agency &mdash; Minor modifications within pre-defined limits</div>
+      </div>
+    </div>
+    <div class="framework-items">
+      <div class="framework-item yellow-item">
+        <h4>Adding Ungraded Practice / Exit Tickets</h4>
+        <p>You may add one (1) ungraded exercise per day. Label as "Optional / Ungraded Practice" in Google Classroom.</p>
+      </div>
+      <div class="framework-item yellow-item">
+        <h4>Modifying Definitions for Key Concepts</h4>
+        <p>Add clarifying examples labeled as "Analogy:" or "Example:". Original definition must remain first.</p>
+      </div>
+      <div class="framework-item yellow-item">
+        <h4>Adjusting Assignment Format</h4>
+        <p>Add supplementary details within existing sections. Do not change, reorder, or delete primary template headers.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="framework-section reveal" style="transition-delay:0.3s">
+    <div class="framework-header">
+      <div class="framework-dot red"></div>
+      <div>
+        <h3 style="color:var(--red);">Red Light: Stop and Get Approval</h3>
+        <div class="framework-subtitle">Requires Authorization &mdash; Broad impact beyond your classroom</div>
+      </div>
+    </div>
+    <div class="framework-items">
+      <div class="framework-item red-item">
+        <h4>Adding or Modifying Graded Work</h4>
+        <p>All graded work must be standardized to ensure fair and equitable assessment for all students.</p>
+      </div>
+      <div class="framework-item red-item">
+        <h4>Changing Core Learning Objectives</h4>
+        <p>The fundamental skills and outcomes for each module are fixed.</p>
+      </div>
+      <div class="framework-item red-item">
+        <h4>Changes to the AI Use Policy</h4>
+        <p>This is a critical and evolving policy that requires central oversight.</p>
+      </div>
+      <div class="framework-item red-item">
+        <h4>Changes to Course Schedule</h4>
+        <p>Modifying dates, times, or sequence has a significant logistical impact.</p>
+      </div>
+      <div class="framework-item red-item">
+        <h4>Introducing New Tools to the Tech Stack</h4>
+        <p>Any software, platforms, or tools must be approved, vetted for security, and supported by the organization.</p>
+      </div>
+      <div class="framework-item red-item">
+        <h4>Changes to the Brand Kit</h4>
+        <p>Core template (logos, fonts, color schemes) must not be changed to maintain brand consistency.</p>
+      </div>
+    </div>
+
+    <div style="margin-top:24px; background:var(--g50); border-radius:var(--radius-sm); padding:20px; border:1px solid var(--g200);">
+      <h4 style="font-size:0.85rem; font-weight:700; color:var(--navy); margin-bottom:8px;">How to Request Approval</h4>
+      <p style="font-size:0.85rem; color:var(--g500); line-height:1.6;">Share an Asana task with the subject "Decision Request: [Topic]". Assign it to your T&amp;L Manager as an "Action Step" in the weekly stand-up. Include: the proposed change, rationale, potential benefit to students, potential risks, and the date you'd like it reviewed by.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 6. TEACHING SCENARIOS ===== -->
+<div class="banner" id="scenarios">
+  <div class="banner-inner">
+    <div class="reveal">
+      <div class="section-label">06 &mdash; Teaching Scenarios</div>
+      <div class="section-title">Remote Bootcamp Scenarios</div>
+      <p class="section-desc">These interactive examples will help you navigate challenging situations with confidence. Click each scenario to reveal the challenge and suggested approaches.</p>
+    </div>
+
+    <div class="reveal" style="transition-delay:0.1s">
+      <div class="scenario-card" style="border-color:rgba(255,255,255,0.1);">
+        <div class="scenario-header" onclick="toggleScenario(this)">
+          <div>
+            <div class="scenario-num">Scenario 01</div>
+            <h3>Time Management Crunch</h3>
+          </div>
+          <div class="scenario-toggle">+</div>
+        </div>
+        <div class="scenario-body">
+          <div class="scenario-body-inner">
+            <div class="scenario-grid">
+              <div class="scenario-block" style="background:rgba(41,27,75,0.4);">
+                <h4 style="color:var(--gold);">The Scenario</h4>
+                <p style="color:rgba(255,255,255,0.8);">You're 30 minutes into a 90-minute JavaScript class. Your planned exercise is taking twice as long as expected.</p>
+              </div>
+              <div class="scenario-block" style="background:rgba(41,27,75,0.4);">
+                <h4 style="color:var(--gold);">The Challenge</h4>
+                <p style="color:rgba(255,255,255,0.8);">Several students are still confused. You have two more key concepts to cover before the end of class.</p>
+              </div>
+            </div>
+            <div class="scenario-response" style="background:rgba(39,174,96,0.1); border-left-color:var(--green);">
+              <h4>Suggested Approaches</h4>
+              <ul style="color:rgba(255,255,255,0.75);">
+                <li>Pause the exercise and do a quick temperature check with the class</li>
+                <li>Prioritize the most critical remaining concept and defer the other to next session</li>
+                <li>Use a "parking lot" &mdash; capture unfinished work for follow-up asynchronously</li>
+                <li>Convert the remaining exercise to a guided demo where you code together live</li>
+                <li>Share a recorded walkthrough in Slack for students who need more time</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="reveal" style="transition-delay:0.15s">
+      <div class="scenario-card" style="border-color:rgba(255,255,255,0.1);">
+        <div class="scenario-header" onclick="toggleScenario(this)">
+          <div>
+            <div class="scenario-num">Scenario 02</div>
+            <h3>Supporting Neurodivergent Learners</h3>
+          </div>
+          <div class="scenario-toggle">+</div>
+        </div>
+        <div class="scenario-body">
+          <div class="scenario-body-inner">
+            <div class="scenario-grid">
+              <div class="scenario-block" style="background:rgba(41,27,75,0.4);">
+                <h4 style="color:var(--gold);">The Scenario</h4>
+                <p style="color:rgba(255,255,255,0.8);">A student consistently struggles to stay focused during long lecture segments. They frequently go off-camera and appear disengaged in breakout rooms.</p>
+              </div>
+              <div class="scenario-block" style="background:rgba(41,27,75,0.4);">
+                <h4 style="color:var(--gold);">The Challenge</h4>
+                <p style="color:rgba(255,255,255,0.8);">You want to support this student without singling them out or making assumptions about their needs.</p>
+              </div>
+            </div>
+            <div class="scenario-response" style="background:rgba(39,174,96,0.1); border-left-color:var(--green);">
+              <h4>Suggested Approaches</h4>
+              <ul style="color:rgba(255,255,255,0.75);">
+                <li>Build in movement breaks and activity transitions every 15-20 minutes for the whole class</li>
+                <li>Offer multiple ways to participate: chat, voice, polls, annotations</li>
+                <li>Check in privately via DM &mdash; "How can I best support you in class?"</li>
+                <li>Provide agendas and materials ahead of time so students can prepare</li>
+                <li>Use closed captions and visual aids to support different processing styles</li>
+                <li>Normalize cameras-off breaks &mdash; "Take 2 minutes, stretch, come back ready"</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="reveal" style="transition-delay:0.2s">
+      <div class="scenario-card" style="border-color:rgba(255,255,255,0.1);">
+        <div class="scenario-header" onclick="toggleScenario(this)">
+          <div>
+            <div class="scenario-num">Scenario 03</div>
+            <h3>Addressing Knowledge Gaps</h3>
+          </div>
+          <div class="scenario-toggle">+</div>
+        </div>
+        <div class="scenario-body">
+          <div class="scenario-body-inner">
+            <div class="scenario-grid">
+              <div class="scenario-block" style="background:rgba(41,27,75,0.4);">
+                <h4 style="color:var(--gold);">The Scenario</h4>
+                <p style="color:rgba(255,255,255,0.8);">You're teaching arrays in JavaScript, but half the class is still struggling with variables and basic syntax from the previous module.</p>
+              </div>
+              <div class="scenario-block" style="background:rgba(41,27,75,0.4);">
+                <h4 style="color:var(--gold);">The Challenge</h4>
+                <p style="color:rgba(255,255,255,0.8);">Moving forward leaves students behind; going back bores those who are ready. You need to serve both groups.</p>
+              </div>
+            </div>
+            <div class="scenario-response" style="background:rgba(39,174,96,0.1); border-left-color:var(--green);">
+              <h4>Suggested Approaches</h4>
+              <ul style="color:rgba(255,255,255,0.75);">
+                <li>Use a quick diagnostic poll or exit ticket to gauge where everyone is</li>
+                <li>Split into differentiated breakout rooms: review group and advanced group</li>
+                <li>Pair struggling students with stronger peers for collaborative exercises</li>
+                <li>Provide a "Level Up" challenge for advanced students while you review basics</li>
+                <li>Share supplemental review resources in Slack for independent practice</li>
+                <li>Flag to your T&amp;L Manager if the gap is systemic across the cohort</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="reveal" style="transition-delay:0.25s">
+      <div class="scenario-card" style="border-color:rgba(255,255,255,0.1);">
+        <div class="scenario-header" onclick="toggleScenario(this)">
+          <div>
+            <div class="scenario-num">Scenario 04</div>
+            <h3>Low Energy / Silent Classroom</h3>
+          </div>
+          <div class="scenario-toggle">+</div>
+        </div>
+        <div class="scenario-body">
+          <div class="scenario-body-inner">
+            <div class="scenario-grid">
+              <div class="scenario-block" style="background:rgba(41,27,75,0.4);">
+                <h4 style="color:var(--gold);">The Scenario</h4>
+                <p style="color:rgba(255,255,255,0.8);">It's the second week and your class has gone completely silent. Nobody answers questions, cameras are off, and chat is empty.</p>
+              </div>
+              <div class="scenario-block" style="background:rgba(41,27,75,0.4);">
+                <h4 style="color:var(--gold);">The Challenge</h4>
+                <p style="color:rgba(255,255,255,0.8);">You need to rebuild engagement without making it feel forced or punitive.</p>
+              </div>
+            </div>
+            <div class="scenario-response" style="background:rgba(39,174,96,0.1); border-left-color:var(--green);">
+              <h4>Suggested Approaches</h4>
+              <ul style="color:rgba(255,255,255,0.75);">
+                <li>Start with a low-stakes warm-up: "Drop your favorite song in chat" or a poll</li>
+                <li>Use the Waterfall technique &mdash; everyone types but doesn't send until you say "go"</li>
+                <li>Acknowledge the silence without shaming: "I notice it's quiet &mdash; that's okay, let's try something different"</li>
+                <li>Switch to smaller breakout rooms (2-3 people) where students feel safer talking</li>
+                <li>Give private shout-outs via DM to students who participate to build confidence</li>
+                <li>Consider whether the content/pacing needs adjusting based on energy levels</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 7. VIRTUAL ENGAGEMENT TOOLKIT ===== -->
+<section class="section" id="toolkit">
+  <div class="reveal">
+    <div class="section-label">07 &mdash; Virtual Engagement Toolkit</div>
+    <div class="section-title">Back-Pocket Activities &amp; Strategies</div>
+    <p class="section-desc">Keep these in your back pocket for whenever energy dips, you need a transition, or you want to check understanding. Each card is a ready-to-use strategy for the virtual classroom.</p>
+  </div>
+
+  <div class="toolkit-grid">
+    <!-- Waterfall -->
+    <div class="toolkit-card reveal" style="transition-delay:0.05s">
+      <div class="toolkit-card-header">
+        <div class="toolkit-emoji">&#127754;</div>
+        <div>
+          <h3>Waterfall in Chat</h3>
+          <p>Everyone types their answer but doesn't hit send until you say "Go!" &mdash; then a waterfall of responses floods the chat simultaneously.</p>
+        </div>
+      </div>
+      <div class="toolkit-steps">
+        <h4>How to Run</h4>
+        <ol>
+          <li>Pose a question or prompt to the class</li>
+          <li>Say "Type your answer in chat but DON'T hit enter yet"</li>
+          <li>Wait 15-20 seconds for everyone to type</li>
+          <li>Count down "3, 2, 1 &mdash; GO!" and everyone sends at once</li>
+          <li>Read through responses aloud, highlight interesting answers</li>
+        </ol>
+      </div>
+      <div class="toolkit-meta">
+        <div class="toolkit-meta-item">
+          <div class="toolkit-meta-label">Time</div>
+          <div class="toolkit-meta-value">2-3 min</div>
+        </div>
+        <div class="toolkit-meta-item">
+          <div class="toolkit-meta-label">Best For</div>
+          <div class="toolkit-meta-value">Check-ins</div>
+        </div>
+        <div class="toolkit-meta-item">
+          <div class="toolkit-meta-label">Energy</div>
+          <div class="toolkit-meta-value">High</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Polls -->
+    <div class="toolkit-card reveal" style="transition-delay:0.1s">
+      <div class="toolkit-card-header">
+        <div class="toolkit-emoji">&#128202;</div>
+        <div>
+          <h3>Quick Polls</h3>
+          <p>Use Zoom polls or simple "Type 1, 2, or 3" in chat to quickly gauge understanding, preferences, or opinions.</p>
+        </div>
+      </div>
+      <div class="toolkit-steps">
+        <h4>How to Run</h4>
+        <ol>
+          <li>Prepare 1-2 poll questions before class (or improvise with chat)</li>
+          <li>Share the question on screen or read it aloud</li>
+          <li>Launch the poll or ask students to type their answer</li>
+          <li>Share results and discuss &mdash; "Interesting, most of you said..."</li>
+        </ol>
+      </div>
+      <div class="toolkit-meta">
+        <div class="toolkit-meta-item">
+          <div class="toolkit-meta-label">Time</div>
+          <div class="toolkit-meta-value">1-2 min</div>
+        </div>
+        <div class="toolkit-meta-item">
+          <div class="toolkit-meta-label">Best For</div>
+          <div class="toolkit-meta-value">Comprehension</div>
+        </div>
+        <div class="toolkit-meta-item">
+          <div class="toolkit-meta-label">Energy</div>
+          <div class="toolkit-meta-value">Low-Med</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Breakout Rooms -->
+    <div class="toolkit-card reveal" style="transition-delay:0.15s">
+      <div class="toolkit-card-header">
+        <div class="toolkit-emoji">&#128101;</div>
+        <div>
+          <h3>Breakout Rooms</h3>
+          <p>Small-group discussions or collaborative exercises. Students often talk more freely in groups of 2-4 than in the full class.</p>
+        </div>
+      </div>
+      <div class="toolkit-steps">
+        <h4>How to Run</h4>
+        <ol>
+          <li>Give clear instructions BEFORE opening rooms (task, time limit, deliverable)</li>
+          <li>Assign 2-4 students per room with a specific prompt</li>
+          <li>Pop into rooms briefly to check progress</li>
+          <li>Bring everyone back and have groups share key takeaways</li>
+        </ol>
+      </div>
+      <div class="toolkit-meta">
+        <div class="toolkit-meta-item">
+          <div class="toolkit-meta-label">Time</div>
+          <div class="toolkit-meta-value">5-15 min</div>
+        </div>
+        <div class="toolkit-meta-item">
+          <div class="toolkit-meta-label">Best For</div>
+          <div class="toolkit-meta-value">Deep Discussion</div>
+        </div>
+        <div class="toolkit-meta-item">
+          <div class="toolkit-meta-label">Energy</div>
+          <div class="toolkit-meta-value">Medium</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Think-Pair-Share -->
+    <div class="toolkit-card reveal" style="transition-delay:0.2s">
+      <div class="toolkit-card-header">
+        <div class="toolkit-emoji">&#129309;</div>
+        <div>
+          <h3>Think-Pair-Share</h3>
+          <p>Students think individually, discuss with a partner in a breakout, then share with the full group. Builds confidence before public sharing.</p>
+        </div>
+      </div>
+      <div class="toolkit-steps">
+        <h4>How to Run</h4>
+        <ol>
+          <li>Pose a question &mdash; give 1 minute of silent thinking time</li>
+          <li>Open 2-person breakout rooms for 3 minutes of discussion</li>
+          <li>Return to main room &mdash; ask pairs to share their key insight</li>
+          <li>Synthesize: "I'm hearing a pattern here..."</li>
+        </ol>
+      </div>
+      <div class="toolkit-meta">
+        <div class="toolkit-meta-item">
+          <div class="toolkit-meta-label">Time</div>
+          <div class="toolkit-meta-value">5-8 min</div>
+        </div>
+        <div class="toolkit-meta-item">
+          <div class="toolkit-meta-label">Best For</div>
+          <div class="toolkit-meta-value">Reflection</div>
+        </div>
+        <div class="toolkit-meta-item">
+          <div class="toolkit-meta-label">Energy</div>
+          <div class="toolkit-meta-value">Medium</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Emoji Reactions -->
+    <div class="toolkit-card reveal" style="transition-delay:0.25s">
+      <div class="toolkit-card-header">
+        <div class="toolkit-emoji">&#128077;</div>
+        <div>
+          <h3>Emoji Reactions / Check-ins</h3>
+          <p>Use Zoom reactions or chat emojis for quick temperature checks. "Give me a thumbs up if you're following, question mark if you're confused."</p>
+        </div>
+      </div>
+      <div class="toolkit-steps">
+        <h4>How to Run</h4>
+        <ol>
+          <li>Define your emoji scale: e.g., green heart = got it, yellow = kinda, red = lost</li>
+          <li>Pause at natural transitions: "Quick check &mdash; react in chat"</li>
+          <li>Read the room and adjust pace accordingly</li>
+          <li>Can also use for fun: "React with your current mood"</li>
+        </ol>
+      </div>
+      <div class="toolkit-meta">
+        <div class="toolkit-meta-item">
+          <div class="toolkit-meta-label">Time</div>
+          <div class="toolkit-meta-value">30 sec</div>
+        </div>
+        <div class="toolkit-meta-item">
+          <div class="toolkit-meta-label">Best For</div>
+          <div class="toolkit-meta-value">Temp Check</div>
+        </div>
+        <div class="toolkit-meta-item">
+          <div class="toolkit-meta-label">Energy</div>
+          <div class="toolkit-meta-value">Low</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cold Call Wheel -->
+    <div class="toolkit-card reveal" style="transition-delay:0.3s">
+      <div class="toolkit-card-header">
+        <div class="toolkit-emoji">&#127921;</div>
+        <div>
+          <h3>Cold Call Wheel / Random Picker</h3>
+          <p>Use a random name picker wheel to select students for answers. Takes the pressure off &mdash; "it's not me choosing, it's the wheel!"</p>
+        </div>
+      </div>
+      <div class="toolkit-steps">
+        <h4>How to Run</h4>
+        <ol>
+          <li>Set up a wheel with student names (wheelofnames.com or similar)</li>
+          <li>Share screen and spin the wheel for all to see</li>
+          <li>Selected student answers &mdash; if they pass, spin again (no shame)</li>
+          <li>Celebrate all answers: "Great thinking!" regardless of correctness</li>
+        </ol>
+      </div>
+      <div class="toolkit-meta">
+        <div class="toolkit-meta-item">
+          <div class="toolkit-meta-label">Time</div>
+          <div class="toolkit-meta-value">1-2 min</div>
+        </div>
+        <div class="toolkit-meta-item">
+          <div class="toolkit-meta-label">Best For</div>
+          <div class="toolkit-meta-value">Participation</div>
+        </div>
+        <div class="toolkit-meta-item">
+          <div class="toolkit-meta-label">Energy</div>
+          <div class="toolkit-meta-value">High</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gallery Walk -->
+    <div class="toolkit-card reveal" style="transition-delay:0.35s">
+      <div class="toolkit-card-header">
+        <div class="toolkit-emoji">&#128444;</div>
+        <div>
+          <h3>Virtual Gallery Walk</h3>
+          <p>Students post work/ideas to a shared doc or Jamboard, then "walk" through and leave comments or reactions on each other's work.</p>
+        </div>
+      </div>
+      <div class="toolkit-steps">
+        <h4>How to Run</h4>
+        <ol>
+          <li>Have students create their artifact (code snippet, design, answer) on a shared board</li>
+          <li>Give 5 minutes for everyone to "walk" through the board</li>
+          <li>Students leave sticky note comments or reactions on peers' work</li>
+          <li>Debrief: highlight standout contributions and common themes</li>
+        </ol>
+      </div>
+      <div class="toolkit-meta">
+        <div class="toolkit-meta-item">
+          <div class="toolkit-meta-label">Time</div>
+          <div class="toolkit-meta-value">10-15 min</div>
+        </div>
+        <div class="toolkit-meta-item">
+          <div class="toolkit-meta-label">Best For</div>
+          <div class="toolkit-meta-value">Peer Review</div>
+        </div>
+        <div class="toolkit-meta-item">
+          <div class="toolkit-meta-label">Energy</div>
+          <div class="toolkit-meta-value">Medium</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chat Storms -->
+    <div class="toolkit-card reveal" style="transition-delay:0.4s">
+      <div class="toolkit-card-header">
+        <div class="toolkit-emoji">&#9889;</div>
+        <div>
+          <h3>Chat Storms</h3>
+          <p>Rapid-fire brainstorming in chat. Set a 60-second timer and have everyone throw out as many ideas/answers as possible. Quantity over quality.</p>
+        </div>
+      </div>
+      <div class="toolkit-steps">
+        <h4>How to Run</h4>
+        <ol>
+          <li>Frame the prompt: "In 60 seconds, drop every idea you have about..."</li>
+          <li>Start a visible timer on screen</li>
+          <li>Encourage rapid-fire: "Keep them coming! No wrong answers!"</li>
+          <li>After time's up, scroll through and categorize or highlight themes</li>
+        </ol>
+      </div>
+      <div class="toolkit-meta">
+        <div class="toolkit-meta-item">
+          <div class="toolkit-meta-label">Time</div>
+          <div class="toolkit-meta-value">2-3 min</div>
+        </div>
+        <div class="toolkit-meta-item">
+          <div class="toolkit-meta-label">Best For</div>
+          <div class="toolkit-meta-value">Brainstorming</div>
+        </div>
+        <div class="toolkit-meta-item">
+          <div class="toolkit-meta-label">Energy</div>
+          <div class="toolkit-meta-value">High</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Annotation -->
+    <div class="toolkit-card reveal" style="transition-delay:0.45s">
+      <div class="toolkit-card-header">
+        <div class="toolkit-emoji">&#9997;</div>
+        <div>
+          <h3>Screen Annotation</h3>
+          <p>Enable Zoom's annotation tools and let students draw, stamp, or write directly on your shared screen. Great for "circle the bug" or "mark where you'd add code."</p>
+        </div>
+      </div>
+      <div class="toolkit-steps">
+        <h4>How to Run</h4>
+        <ol>
+          <li>Share your screen and enable annotations in Zoom toolbar</li>
+          <li>Give a specific task: "Circle the error" or "Put a star on the best approach"</li>
+          <li>Let students annotate simultaneously</li>
+          <li>Save the annotated screenshot and discuss the results</li>
+        </ol>
+      </div>
+      <div class="toolkit-meta">
+        <div class="toolkit-meta-item">
+          <div class="toolkit-meta-label">Time</div>
+          <div class="toolkit-meta-value">2-5 min</div>
+        </div>
+        <div class="toolkit-meta-item">
+          <div class="toolkit-meta-label">Best For</div>
+          <div class="toolkit-meta-value">Code Review</div>
+        </div>
+        <div class="toolkit-meta-item">
+          <div class="toolkit-meta-label">Energy</div>
+          <div class="toolkit-meta-value">Medium</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Music Breaks -->
+    <div class="toolkit-card reveal" style="transition-delay:0.5s">
+      <div class="toolkit-card-header">
+        <div class="toolkit-emoji">&#127925;</div>
+        <div>
+          <h3>Music Breaks</h3>
+          <p>Play music during transitions, work time, or as a 2-minute brain break. Let students request songs or curate a class playlist together.</p>
+        </div>
+      </div>
+      <div class="toolkit-steps">
+        <h4>How to Run</h4>
+        <ol>
+          <li>Share computer audio through Zoom (check "Share sound" when screen sharing)</li>
+          <li>Play during independent work time or as a transition signal</li>
+          <li>Create a shared Spotify playlist that students can add to</li>
+          <li>Use as a timer: "You have until this song ends to finish up"</li>
+        </ol>
+      </div>
+      <div class="toolkit-meta">
+        <div class="toolkit-meta-item">
+          <div class="toolkit-meta-label">Time</div>
+          <div class="toolkit-meta-value">2-5 min</div>
+        </div>
+        <div class="toolkit-meta-item">
+          <div class="toolkit-meta-label">Best For</div>
+          <div class="toolkit-meta-value">Transitions</div>
+        </div>
+        <div class="toolkit-meta-item">
+          <div class="toolkit-meta-label">Energy</div>
+          <div class="toolkit-meta-value">Chill</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 8. RESOURCE LIBRARY ===== -->
+<div class="banner" id="resources">
+  <div class="banner-inner">
+    <div class="reveal">
+      <div class="section-label">08 &mdash; Resource Library</div>
+      <div class="section-title">Your Reference Collection</div>
+      <p class="section-desc">Curated resources to support your growth as an educator. Bookmark this section and return whenever you need inspiration or guidance.</p>
+    </div>
+
+    <div class="card-grid card-grid-2 reveal" style="transition-delay:0.1s">
+      <div class="card" style="background:rgba(255,255,255,0.06); border-color:rgba(255,255,255,0.08);">
+        <h3 style="font-family:'DM Serif Display',serif; color:var(--gold); margin-bottom:16px;">DEI Resources</h3>
+        <ul style="list-style:none;">
+          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">Moving Towards a Vision of Equitable Computer Science</li>
+          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">Coursera: Boost Equity &amp; Inclusion for your CS Curriculum</li>
+          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">Equity Labs: Why Start With Agreements?</li>
+          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">REDI Agreement</li>
+          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">CSTA Accessibility Guidelines for Slides</li>
+          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">Equal Access: Universal Design of Presentations</li>
+          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">Best Practices to Create an Equitable Classroom</li>
+          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">Eight Ways to Promote Equity in the Classroom</li>
+          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">Designing an Equitable &amp; Sustainable CS Education Program</li>
+        </ul>
+      </div>
+      <div class="card" style="background:rgba(255,255,255,0.06); border-color:rgba(255,255,255,0.08);">
+        <h3 style="font-family:'DM Serif Display',serif; color:var(--gold); margin-bottom:16px;">Pedagogical Resources</h3>
+        <ul style="list-style:none;">
+          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">Challenge Based Learning</li>
+          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">Teach Empowered Classroom Tools</li>
+          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">Planning Computing Instruction through the UDL Framework</li>
+          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">Universal Design for Learning for Computer Science</li>
+          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">The Socratic Method</li>
+          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">Leading Effective Discussions w/ Socratic Questions</li>
+          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">What is PBL? / High Quality Project Based Learning</li>
+          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">Culturally Responsive Teaching &amp; Pedagogy</li>
+          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">Cornell Tech CS Coaching Toolkit</li>
+        </ul>
+      </div>
+      <div class="card" style="background:rgba(255,255,255,0.06); border-color:rgba(255,255,255,0.08);">
+        <h3 style="font-family:'DM Serif Display',serif; color:var(--gold); margin-bottom:16px;">Program Templates</h3>
+        <ul style="list-style:none;">
+          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">DOE Content Outline</li>
+          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">Slide Template</li>
+          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">Google Classroom Template</li>
+          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">Facilitation Guide Template</li>
+          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">Attendance Template</li>
+          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">Completion Certificate</li>
+        </ul>
+      </div>
+      <div class="card" style="background:rgba(255,255,255,0.06); border-color:rgba(255,255,255,0.08);">
+        <h3 style="font-family:'DM Serif Display',serif; color:var(--gold); margin-bottom:16px;">Accessibility Resources</h3>
+        <ul style="list-style:none;">
+          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">Making Your Presentation Accessible (Ladner &amp; Rector)</li>
+          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">Accessible Presentation Guide (SIGACCESS)</li>
+          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">Slides for Teaching CS to Blind &amp; Visually Impaired Students</li>
+          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">Slides for Teaching CS to Deaf &amp; Hard of Hearing Students</li>
+          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">Slides for Teaching CS to Students with Learning Disabilities</li>
+          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">Slides for Teaching CS to Neurodiverse Students</li>
+          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">Atkinsons Hyperlegible Font for Readers with Low Vision</li>
+          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">Google Tech Writing for Accessibility (self paced)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 9. QUICK REFERENCE ===== -->
+<section class="section" id="quickref">
+  <div class="reveal">
+    <div class="section-label">09 &mdash; Quick Reference</div>
+    <div class="section-title">Your Cheat Sheet</div>
+    <p class="section-desc">Key reminders and contacts to keep handy. Print this section or bookmark it for quick access during the program.</p>
+  </div>
+
+  <div class="qr-grid reveal" style="transition-delay:0.1s">
+    <div class="qr-card">
+      <h3>Key Reminders</h3>
+      <ul style="list-style:none;">
+        <li style="padding:8px 0; border-bottom:1px solid var(--g100);">
+          <strong style="color:var(--green);">QTIP</strong> &mdash; Quit Taking It Personally. Student behavior isn't about you.
+        </li>
+        <li style="padding:8px 0; border-bottom:1px solid var(--g100);">
+          <strong style="color:var(--gold-dark);">Green/Yellow/Red</strong> &mdash; When in doubt, check the decision framework before making changes.
+        </li>
+        <li style="padding:8px 0; border-bottom:1px solid var(--g100);">
+          <strong style="color:var(--purple);">Authoritative Style</strong> &mdash; High expectations + high responsiveness is the target.
+        </li>
+        <li style="padding:8px 0; border-bottom:1px solid var(--g100);">
+          <strong style="color:var(--teal);">Back Pocket</strong> &mdash; Always have 2-3 engagement strategies ready before each class.
+        </li>
+        <li style="padding:8px 0;">
+          <strong style="color:var(--orange);">Boundaries</strong> &mdash; No personal contacts, no social media, mandatory reporting.
+        </li>
+      </ul>
+    </div>
+    <div class="qr-card">
+      <h3>Decision Framework at a Glance</h3>
+      <div style="margin-bottom:16px; padding:14px; background:var(--green-light); border-radius:var(--radius-sm); border-left:4px solid var(--green);">
+        <strong style="color:var(--green); font-size:0.82rem;">GREEN &mdash; Go For It</strong>
+        <p style="font-size:0.82rem; color:var(--g500); margin-top:4px;">Presentation content, notes, facilitation flow, engagement strategies, supplemental resources</p>
+      </div>
+      <div style="margin-bottom:16px; padding:14px; background:var(--yellow-light); border-radius:var(--radius-sm); border-left:4px solid var(--yellow);">
+        <strong style="color:var(--gold-dark); font-size:0.82rem;">YELLOW &mdash; Guardrails</strong>
+        <p style="font-size:0.82rem; color:var(--g500); margin-top:4px;">Ungraded practice (1/day), definition modifications (label clearly), assignment format tweaks</p>
+      </div>
+      <div style="padding:14px; background:var(--red-light); border-radius:var(--radius-sm); border-left:4px solid var(--red);">
+        <strong style="color:var(--red); font-size:0.82rem;">RED &mdash; Get Approval</strong>
+        <p style="font-size:0.82rem; color:var(--g500); margin-top:4px;">Graded work, learning objectives, AI policy, schedule, new tools, brand changes</p>
+      </div>
+    </div>
+    <div class="qr-card">
+      <h3>Contact Information</h3>
+      <div style="margin-bottom:16px;">
+        <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:var(--g400); margin-bottom:4px;">Teaching &amp; Learning Manager</div>
+        <div style="font-size:1rem; font-weight:700; color:var(--navy);">Michael Geddes</div>
+        <div style="font-size:0.88rem; color:var(--g500);">Communityprograms@theknowledgehouse.org</div>
+      </div>
+      <div style="margin-bottom:16px;">
+        <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:var(--g400); margin-bottom:4px;">IT Specialist</div>
+        <div style="font-size:1rem; font-weight:700; color:var(--navy);">Remzi Gjikokaj</div>
+        <div style="font-size:0.88rem; color:var(--g500);">rgjikokaj@theknowledgehouse.org</div>
+      </div>
+      <div>
+        <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:var(--g400); margin-bottom:4px;">HR / People Operations</div>
+        <div style="font-size:1rem; font-weight:700; color:var(--navy);">Sterlyn Borges</div>
+        <div style="font-size:0.88rem; color:var(--g500);">sborges@theknowledgehouse.org</div>
+      </div>
+    </div>
+    <div class="qr-card">
+      <h3>Communication Tools</h3>
+      <ul style="list-style:none;">
+        <li style="padding:10px 0; border-bottom:1px solid var(--g100); display:flex; align-items:center; gap:12px;">
+          <div style="width:36px; height:36px; border-radius:8px; background:var(--g100); display:flex; align-items:center; justify-content:center; font-size:1.1rem; flex-shrink:0;">&#128172;</div>
+          <div>
+            <div style="font-weight:700; font-size:0.9rem;">Slack</div>
+            <div style="font-size:0.78rem; color:var(--g500);">Day-to-day communication with your team</div>
+          </div>
+        </li>
+        <li style="padding:10px 0; border-bottom:1px solid var(--g100); display:flex; align-items:center; gap:12px;">
+          <div style="width:36px; height:36px; border-radius:8px; background:var(--g100); display:flex; align-items:center; justify-content:center; font-size:1.1rem; flex-shrink:0;">&#9745;</div>
+          <div>
+            <div style="font-weight:700; font-size:0.9rem;">Asana</div>
+            <div style="font-size:0.78rem; color:var(--g500);">Task management &amp; decision requests</div>
+          </div>
+        </li>
+        <li style="padding:10px 0; border-bottom:1px solid var(--g100); display:flex; align-items:center; gap:12px;">
+          <div style="width:36px; height:36px; border-radius:8px; background:var(--g100); display:flex; align-items:center; justify-content:center; font-size:1.1rem; flex-shrink:0;">&#128218;</div>
+          <div>
+            <div style="font-weight:700; font-size:0.9rem;">Google Workspace</div>
+            <div style="font-size:0.78rem; color:var(--g500);">Docs, Slides, Classroom, Calendar</div>
+          </div>
+        </li>
+        <li style="padding:10px 0; display:flex; align-items:center; gap:12px;">
+          <div style="width:36px; height:36px; border-radius:8px; background:var(--g100); display:flex; align-items:center; justify-content:center; font-size:1.1rem; flex-shrink:0;">&#127909;</div>
+          <div>
+            <div style="font-weight:700; font-size:0.9rem;">Zoom</div>
+            <div style="font-size:0.78rem; color:var(--g500);">Virtual classroom sessions</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="footer-inner">
+    <p style="font-size:1rem; font-weight:700; color:rgba(255,255,255,0.7); margin-bottom:4px;">The Knowledge House</p>
+    <p>79 Alexander Ave, Suite 51-A, Bronx, NY 10454 &bull; (332) 330-4011</p>
+    <p><a href="mailto:info@theknowledgehouse.org">info@theknowledgehouse.org</a> &bull; Youth &amp; Community Development Programs</p>
+    <p style="margin-top:16px; font-size:0.75rem; color:rgba(255,255,255,0.25);">Train the Trainer &mdash; Digital Equity Stewards</p>
+  </div>
+</footer>
+
+<script>
+// ===== NAV SCROLL BEHAVIOR =====
+let lastScroll = 0;
+const nav = document.getElementById('mainNav');
+window.addEventListener('scroll', () => {
+  const current = window.scrollY;
+  if (current > lastScroll && current > 100) {
+    nav.classList.add('hidden');
+  } else {
+    nav.classList.remove('hidden');
+  }
+  lastScroll = current;
+});
+
+// ===== ACTIVE NAV LINK =====
+const sections = document.querySelectorAll('section[id], div.banner[id]');
+const navLinks = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    const top = s.offsetTop - 200;
+    if (window.scrollY >= top) current = s.getAttribute('id');
+  });
+  navLinks.forEach(a => {
+    a.classList.remove('active');
+    if (a.getAttribute('href') === '#' + current) a.classList.add('active');
+  });
+});
+
+// ===== REVEAL ON SCROLL =====
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ===== SCENARIO TOGGLE =====
+function toggleScenario(header) {
+  const card = header.closest('.scenario-card');
+  card.classList.toggle('open');
+}
+</script>
+</body>
+</html>
