@@ -1118,6 +1118,274 @@
     .values-row { flex-direction: column; }
     .hero-locations { gap: 12px; }
     .framework-items { grid-template-columns: 1fr; }
+    .pedagogy-sub-grid { grid-template-columns: 1fr; }
+    .gradual-release-flow { flex-direction: column; }
+    .udl-grid { grid-template-columns: 1fr; }
+    .socratic-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ===== QUADRANT REVEAL ===== */
+  .quadrant-cell {
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .quadrant-cell:hover {
+    transform: scale(1.02);
+    z-index: 2;
+    box-shadow: 0 8px 32px rgba(41,27,75,0.12);
+  }
+  .quadrant-cell .q-details {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.45s cubic-bezier(0.4,0,0.2,1), opacity 0.35s ease;
+  }
+  .quadrant-cell.revealed .q-details {
+    max-height: 220px;
+    opacity: 1;
+  }
+  .q-tap-hint {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--g400);
+    margin-top: 10px;
+    transition: opacity 0.3s;
+  }
+  .quadrant-cell.revealed .q-tap-hint {
+    opacity: 0;
+    height: 0;
+    margin: 0;
+    overflow: hidden;
+  }
+  .quadrant-reveal-all {
+    display: block;
+    margin: 24px auto 0;
+    padding: 12px 32px;
+    background: var(--navy);
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    font-family: 'Lato', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .quadrant-reveal-all:hover {
+    background: var(--blue);
+    transform: translateY(-1px);
+  }
+
+  /* ===== PEDAGOGY SUB-SECTIONS ===== */
+  .pedagogy-sub {
+    margin-top: 64px;
+    padding-top: 48px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+  .pedagogy-sub-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+    color: #fff;
+    margin-bottom: 8px;
+  }
+  .pedagogy-sub-desc {
+    font-size: 0.92rem;
+    color: rgba(255,255,255,0.55);
+    max-width: 700px;
+    line-height: 1.65;
+    margin-bottom: 32px;
+  }
+  .pedagogy-sub-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 32px;
+  }
+  .crt-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+  .crt-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(255,194,10,0.3);
+  }
+  .crt-card h4 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.1rem;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+  .crt-card p {
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.6;
+  }
+  .crt-card .crt-example {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.4);
+    font-style: italic;
+  }
+
+  /* ===== GRADUAL RELEASE FLOW ===== */
+  .gradual-release-flow {
+    display: flex;
+    gap: 0;
+    align-items: stretch;
+    margin-bottom: 32px;
+  }
+  .gr-stage {
+    flex: 1;
+    padding: 28px 24px;
+    position: relative;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .gr-stage:first-child {
+    border-radius: var(--radius) 0 0 var(--radius);
+  }
+  .gr-stage:last-child {
+    border-radius: 0 var(--radius) var(--radius) 0;
+  }
+  .gr-stage .gr-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+  }
+  .gr-stage h4 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.15rem;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+  .gr-stage p {
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.55;
+  }
+  .gr-stage .gr-arrow {
+    position: absolute;
+    right: -14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 28px;
+    height: 28px;
+    background: var(--navy);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gold);
+    font-size: 0.9rem;
+    z-index: 2;
+    border: 2px solid rgba(255,255,255,0.1);
+  }
+  .gr-stage:last-child .gr-arrow { display: none; }
+
+  /* ===== UDL GRID ===== */
+  .udl-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 32px;
+  }
+  .udl-card {
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    border: 1px solid rgba(255,255,255,0.08);
+    position: relative;
+    overflow: hidden;
+  }
+  .udl-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+  }
+  .udl-card h4 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.1rem;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+  .udl-card .udl-principle {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 12px;
+  }
+  .udl-card p {
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+  .udl-card ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .udl-card ul li {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.5);
+    padding: 4px 0 4px 16px;
+    position: relative;
+  }
+  .udl-card ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 11px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+  }
+
+  /* ===== SOCRATIC GRID ===== */
+  .socratic-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 32px;
+  }
+  .socratic-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius);
+    padding: 24px;
+    transition: transform 0.2s;
+  }
+  .socratic-card:hover { transform: translateY(-3px); }
+  .socratic-card h4 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1rem;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+  .socratic-card .socratic-purpose {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 14px;
+    font-style: italic;
+  }
+  .socratic-card .socratic-example {
+    background: rgba(255,255,255,0.04);
+    border-radius: var(--radius-sm);
+    padding: 14px;
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.55;
+    border-left: 3px solid var(--gold);
   }
 </style>
 </head>
@@ -1284,6 +1552,136 @@
         <p style="color:rgba(255,255,255,0.55);">We refine our pedagogical methods constantly, encouraging educators to experiment and evolve instructional strategies.</p>
       </div>
     </div>
+
+    <!-- CRT Framework -->
+    <div class="pedagogy-sub reveal" style="transition-delay:0.35s">
+      <div class="pedagogy-sub-title">Culturally Responsive Teaching</div>
+      <div class="pedagogy-sub-desc">CRT connects learning to students' cultural backgrounds, making content more relevant and accessible. It shifts the question from "Can this student learn?" to "How does this student learn best?"</div>
+      <div class="pedagogy-sub-grid">
+        <div class="crt-card">
+          <h4>Validate</h4>
+          <p>Affirm students' cultural identities. Acknowledge lived experiences as legitimate knowledge and intellectual assets in the classroom.</p>
+          <div class="crt-example">Ask students to connect a coding concept to something from their daily life or community.</div>
+        </div>
+        <div class="crt-card">
+          <h4>Center</h4>
+          <p>Use culturally meaningful examples and context. Frame technical problems around real challenges students' communities face.</p>
+          <div class="crt-example">Build a project that solves a problem in students' neighborhoods &mdash; transit apps, local business sites, community boards.</div>
+        </div>
+        <div class="crt-card">
+          <h4>Bridge</h4>
+          <p>Connect classroom learning to career pathways and professional identity. Help students see themselves in the tech industry.</p>
+          <div class="crt-example">Showcase technologists from similar backgrounds. Discuss how tech skills translate to community impact.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gradual Release of Responsibility -->
+    <div class="pedagogy-sub reveal" style="transition-delay:0.4s">
+      <div class="pedagogy-sub-title">Gradual Release of Responsibility</div>
+      <div class="pedagogy-sub-desc">Move students from dependence to independence using the "I Do, We Do, You Do" framework. Each phase maps to a type of inquiry &mdash; use this to scaffold any lesson.</div>
+      <div class="gradual-release-flow">
+        <div class="gr-stage" style="background: rgba(142,68,173,0.15);">
+          <div class="gr-label" style="color: var(--purple);">Phase 1 &mdash; I Do</div>
+          <h4>Focused Instruction</h4>
+          <p>Teacher models the skill or concept. Students observe and listen. Explain your thinking process out loud.</p>
+          <div class="gr-arrow">&rarr;</div>
+        </div>
+        <div class="gr-stage" style="background: rgba(255,194,10,0.1);">
+          <div class="gr-label" style="color: var(--gold);">Phase 2 &mdash; We Do</div>
+          <h4>Guided Practice</h4>
+          <p>Teacher and students work together. Use think-pair-share, guided coding, and collaborative problem-solving.</p>
+          <div class="gr-arrow">&rarr;</div>
+        </div>
+        <div class="gr-stage" style="background: rgba(39,174,96,0.12);">
+          <div class="gr-label" style="color: var(--green);">Phase 3 &mdash; You Do</div>
+          <h4>Independent Practice</h4>
+          <p>Students apply learning independently. Circulate, observe, and provide targeted feedback. Resist the urge to re-teach.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- UDL Quick Guide -->
+    <div class="pedagogy-sub reveal" style="transition-delay:0.45s">
+      <div class="pedagogy-sub-title">Universal Design for Learning</div>
+      <div class="pedagogy-sub-desc">UDL removes barriers by providing multiple means of engagement, representation, and action. Design lessons that work for ALL learners from the start &mdash; not as an afterthought.</div>
+      <div class="udl-grid">
+        <div class="udl-card" style="background: rgba(39,174,96,0.1);">
+          <div style="position:absolute;top:0;left:0;right:0;height:4px;background:var(--green);"></div>
+          <div class="udl-principle" style="color: var(--green);">Engagement</div>
+          <h4>The "Why" of Learning</h4>
+          <p>Provide options for recruiting interest and sustaining motivation.</p>
+          <ul>
+            <li style="color:rgba(255,255,255,0.5);">Offer choices in project topics</li>
+            <li style="color:rgba(255,255,255,0.5);">Use real-world problems as hooks</li>
+            <li style="color:rgba(255,255,255,0.5);">Build in collaboration opportunities</li>
+            <li style="color:rgba(255,255,255,0.5);">Provide mastery-oriented feedback</li>
+          </ul>
+        </div>
+        <div class="udl-card" style="background: rgba(142,68,173,0.1);">
+          <div style="position:absolute;top:0;left:0;right:0;height:4px;background:var(--purple);"></div>
+          <div class="udl-principle" style="color: var(--purple);">Representation</div>
+          <h4>The "What" of Learning</h4>
+          <p>Present information in multiple formats so all students can access content.</p>
+          <ul>
+            <li style="color:rgba(255,255,255,0.5);">Live demo + written tutorial</li>
+            <li style="color:rgba(255,255,255,0.5);">Code alongside visual diagrams</li>
+            <li style="color:rgba(255,255,255,0.5);">Captioned video walkthroughs</li>
+            <li style="color:rgba(255,255,255,0.5);">Highlight patterns across examples</li>
+          </ul>
+        </div>
+        <div class="udl-card" style="background: rgba(255,194,10,0.08);">
+          <div style="position:absolute;top:0;left:0;right:0;height:4px;background:var(--gold);"></div>
+          <div class="udl-principle" style="color: var(--gold);">Action &amp; Expression</div>
+          <h4>The "How" of Learning</h4>
+          <p>Give students flexible ways to demonstrate what they know.</p>
+          <ul>
+            <li style="color:rgba(255,255,255,0.5);">Code, present, write, or diagram</li>
+            <li style="color:rgba(255,255,255,0.5);">Pair programming as assessment</li>
+            <li style="color:rgba(255,255,255,0.5);">Portfolio over single test</li>
+            <li style="color:rgba(255,255,255,0.5);">Scaffold complex tasks into steps</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Socratic Questioning Toolkit -->
+    <div class="pedagogy-sub reveal" style="transition-delay:0.5s">
+      <div class="pedagogy-sub-title">Socratic Questioning Toolkit</div>
+      <div class="pedagogy-sub-desc">The Socratic method develops critical thinking by guiding students to discover answers themselves. Use these question types to probe deeper understanding instead of simply giving answers.</div>
+      <div class="socratic-grid">
+        <div class="socratic-card">
+          <h4>Clarification</h4>
+          <div class="socratic-purpose">Surface assumptions and ensure understanding</div>
+          <div class="socratic-example">"What do you mean when you say the code 'doesn't work'? What did you expect to happen vs. what actually happened?"</div>
+        </div>
+        <div class="socratic-card">
+          <h4>Probing Assumptions</h4>
+          <div class="socratic-purpose">Challenge underlying beliefs about the problem</div>
+          <div class="socratic-example">"What are you assuming about how this function handles null values? What if that assumption is wrong?"</div>
+        </div>
+        <div class="socratic-card">
+          <h4>Evidence &amp; Reasoning</h4>
+          <div class="socratic-purpose">Encourage students to support their reasoning</div>
+          <div class="socratic-example">"How do you know this loop runs exactly 5 times? Can you trace through it with me?"</div>
+        </div>
+        <div class="socratic-card">
+          <h4>Exploring Viewpoints</h4>
+          <div class="socratic-purpose">Consider alternative approaches</div>
+          <div class="socratic-example">"That's one way to solve it. What would a different approach look like? What are the trade-offs?"</div>
+        </div>
+        <div class="socratic-card">
+          <h4>Implications</h4>
+          <div class="socratic-purpose">Think about consequences and connections</div>
+          <div class="socratic-example">"If you change this variable here, what happens to the rest of the program? What could go wrong?"</div>
+        </div>
+        <div class="socratic-card">
+          <h4>Meta-Questions</h4>
+          <div class="socratic-purpose">Reflect on the learning process itself</div>
+          <div class="socratic-example">"What strategy did you use to debug this? How would you approach a similar problem next time?"</div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1300,49 +1698,61 @@
   </div>
   <div class="quadrant-container reveal" style="transition-delay:0.15s">
     <div class="quadrant">
-      <div class="quadrant-cell q-permissive">
+      <div class="quadrant-cell q-permissive" onclick="toggleQuadrant(this)">
         <h4>Permissive</h4>
-        <div class="q-quote">"Whatever you want!"</div>
-        <ul>
-          <li>Low expectations</li>
-          <li>Few rules</li>
-          <li>Indulgent &amp; accepting</li>
-          <li>Avoids confrontation</li>
-          <li>Warm</li>
-        </ul>
+        <div class="q-tap-hint">Click to reveal</div>
+        <div class="q-details">
+          <div class="q-quote">"Whatever you want!"</div>
+          <ul>
+            <li>Low expectations</li>
+            <li>Few rules</li>
+            <li>Indulgent &amp; accepting</li>
+            <li>Avoids confrontation</li>
+            <li>Warm</li>
+          </ul>
+        </div>
       </div>
-      <div class="quadrant-cell q-authoritative">
+      <div class="quadrant-cell q-authoritative" onclick="toggleQuadrant(this)">
         <h4>Authoritative</h4>
-        <div class="q-quote">"Let's discuss this."</div>
-        <ul>
-          <li>High expectations</li>
-          <li>Clear standards</li>
-          <li>Assertive &amp; democratic</li>
-          <li>Flexible &amp; responsive</li>
-          <li>Warm</li>
-        </ul>
+        <div class="q-tap-hint">Click to reveal</div>
+        <div class="q-details">
+          <div class="q-quote">"Let's discuss this."</div>
+          <ul>
+            <li>High expectations</li>
+            <li>Clear standards</li>
+            <li>Assertive &amp; democratic</li>
+            <li>Flexible &amp; responsive</li>
+            <li>Warm</li>
+          </ul>
+        </div>
       </div>
-      <div class="quadrant-cell q-uninvolved">
+      <div class="quadrant-cell q-uninvolved" onclick="toggleQuadrant(this)">
         <h4>Uninvolved</h4>
-        <div class="q-quote">"I really don't care."</div>
-        <ul>
-          <li>No expectations</li>
-          <li>Few rules</li>
-          <li>Absent &amp; passive</li>
-          <li>Neglectful</li>
-          <li>Competing priorities</li>
-        </ul>
+        <div class="q-tap-hint">Click to reveal</div>
+        <div class="q-details">
+          <div class="q-quote">"I really don't care."</div>
+          <ul>
+            <li>No expectations</li>
+            <li>Few rules</li>
+            <li>Absent &amp; passive</li>
+            <li>Neglectful</li>
+            <li>Competing priorities</li>
+          </ul>
+        </div>
       </div>
-      <div class="quadrant-cell q-authoritarian">
+      <div class="quadrant-cell q-authoritarian" onclick="toggleQuadrant(this)">
         <h4>Authoritarian</h4>
-        <div class="q-quote">"Because I said so!"</div>
-        <ul>
-          <li>High expectations</li>
-          <li>Clear rules</li>
-          <li>Forceful &amp; autocratic</li>
-          <li>Rigid</li>
-          <li>Limited warmth</li>
-        </ul>
+        <div class="q-tap-hint">Click to reveal</div>
+        <div class="q-details">
+          <div class="q-quote">"Because I said so!"</div>
+          <ul>
+            <li>High expectations</li>
+            <li>Clear rules</li>
+            <li>Forceful &amp; autocratic</li>
+            <li>Rigid</li>
+            <li>Limited warmth</li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -1350,6 +1760,7 @@
     <span>Low Demandingness</span>
     <span>High Demandingness</span>
   </div>
+  <button class="quadrant-reveal-all reveal" style="transition-delay:0.25s" onclick="revealAllQuadrants()">Reveal All Styles</button>
 
   <div class="reveal" style="margin-top:64px; transition-delay:0.25s">
     <div class="section-label" style="margin-bottom:8px;">Types of Student Inquiry</div>
@@ -2077,29 +2488,29 @@
       <div class="card" style="background:rgba(255,255,255,0.06); border-color:rgba(255,255,255,0.08);">
         <h3 style="font-family:'DM Serif Display',serif; color:var(--gold); margin-bottom:16px;">DEI Resources</h3>
         <ul style="list-style:none;">
-          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">Moving Towards a Vision of Equitable Computer Science</li>
-          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">Coursera: Boost Equity &amp; Inclusion for your CS Curriculum</li>
-          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">Equity Labs: Why Start With Agreements?</li>
-          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">REDI Agreement</li>
-          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">CSTA Accessibility Guidelines for Slides</li>
-          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">Equal Access: Universal Design of Presentations</li>
-          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">Best Practices to Create an Equitable Classroom</li>
-          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">Eight Ways to Promote Equity in the Classroom</li>
-          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">Designing an Equitable &amp; Sustainable CS Education Program</li>
+          <li style="padding:6px 0;"><a href="https://csteachers.org/stories/moving-toward-a-vision-of-equitable-computer-science/" target="_blank" style="color:rgba(255,255,255,0.65); text-decoration:none; border-bottom:1px solid rgba(255,255,255,0.2); transition:color 0.2s, border-color 0.2s;" onmouseover="this.style.color='var(--gold)';this.style.borderColor='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,0.65)';this.style.borderColor='rgba(255,255,255,0.2)'">Moving Towards a Vision of Equitable Computer Science</a></li>
+          <li style="padding:6px 0;"><a href="https://csteachers.org/events/add-ons-to-boost-equity-and-inclusion-for-your-cs-curriculum-winter-2025-session/" target="_blank" style="color:rgba(255,255,255,0.65); text-decoration:none; border-bottom:1px solid rgba(255,255,255,0.2); transition:color 0.2s, border-color 0.2s;" onmouseover="this.style.color='var(--gold)';this.style.borderColor='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,0.65)';this.style.borderColor='rgba(255,255,255,0.2)'">Coursera: Boost Equity &amp; Inclusion for your CS Curriculum</a></li>
+          <li style="padding:6px 0;"><a href="https://www.theequitylab.org/blog/why-start-with-agreements" target="_blank" style="color:rgba(255,255,255,0.65); text-decoration:none; border-bottom:1px solid rgba(255,255,255,0.2); transition:color 0.2s, border-color 0.2s;" onmouseover="this.style.color='var(--gold)';this.style.borderColor='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,0.65)';this.style.borderColor='rgba(255,255,255,0.2)'">Equity Labs: Why Start With Agreements?</a></li>
+          <li style="padding:6px 0;"><a href="https://static1.squarespace.com/static/5e90af1f141b51081e7194aa/t/5f43ff9d6a8cb7299871698c/1598291869551/REDI+Agreements+2020.pdf" target="_blank" style="color:rgba(255,255,255,0.65); text-decoration:none; border-bottom:1px solid rgba(255,255,255,0.2); transition:color 0.2s, border-color 0.2s;" onmouseover="this.style.color='var(--gold)';this.style.borderColor='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,0.65)';this.style.borderColor='rgba(255,255,255,0.2)'">REDI Agreement</a></li>
+          <li style="padding:6px 0;"><a href="https://csteachers.org/accessibility/" target="_blank" style="color:rgba(255,255,255,0.65); text-decoration:none; border-bottom:1px solid rgba(255,255,255,0.2); transition:color 0.2s, border-color 0.2s;" onmouseover="this.style.color='var(--gold)';this.style.borderColor='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,0.65)';this.style.borderColor='rgba(255,255,255,0.2)'">CSTA Accessibility Guidelines for Slides</a></li>
+          <li style="padding:6px 0;"><a href="https://www.washington.edu/accesscomputing/equal-access-universal-design-your-presentation" target="_blank" style="color:rgba(255,255,255,0.65); text-decoration:none; border-bottom:1px solid rgba(255,255,255,0.2); transition:color 0.2s, border-color 0.2s;" onmouseover="this.style.color='var(--gold)';this.style.borderColor='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,0.65)';this.style.borderColor='rgba(255,255,255,0.2)'">Equal Access: Universal Design of Presentations</a></li>
+          <li style="padding:6px 0;"><a href="https://www.goguardian.com/blog/creating-an-equitable-classroom" target="_blank" style="color:rgba(255,255,255,0.65); text-decoration:none; border-bottom:1px solid rgba(255,255,255,0.2); transition:color 0.2s, border-color 0.2s;" onmouseover="this.style.color='var(--gold)';this.style.borderColor='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,0.65)';this.style.borderColor='rgba(255,255,255,0.2)'">Best Practices to Create an Equitable Classroom</a></li>
+          <li style="padding:6px 0;"><a href="https://oureclass.com/blog/promote-equity-classroom-ways" target="_blank" style="color:rgba(255,255,255,0.65); text-decoration:none; border-bottom:1px solid rgba(255,255,255,0.2); transition:color 0.2s, border-color 0.2s;" onmouseover="this.style.color='var(--gold)';this.style.borderColor='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,0.65)';this.style.borderColor='rgba(255,255,255,0.2)'">Eight Ways to Promote Equity in the Classroom</a></li>
+          <li style="padding:6px 0;"><a href="https://bootuppd.org/news/designing-an-equitable-and-sustainable-computer-science-education-program/" target="_blank" style="color:rgba(255,255,255,0.65); text-decoration:none; border-bottom:1px solid rgba(255,255,255,0.2); transition:color 0.2s, border-color 0.2s;" onmouseover="this.style.color='var(--gold)';this.style.borderColor='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,0.65)';this.style.borderColor='rgba(255,255,255,0.2)'">Designing an Equitable &amp; Sustainable CS Education Program</a></li>
         </ul>
       </div>
       <div class="card" style="background:rgba(255,255,255,0.06); border-color:rgba(255,255,255,0.08);">
         <h3 style="font-family:'DM Serif Display',serif; color:var(--gold); margin-bottom:16px;">Pedagogical Resources</h3>
         <ul style="list-style:none;">
-          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">Challenge Based Learning</li>
-          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">Teach Empowered Classroom Tools</li>
-          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">Planning Computing Instruction through the UDL Framework</li>
-          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">Universal Design for Learning for Computer Science</li>
-          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">The Socratic Method</li>
-          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">Leading Effective Discussions w/ Socratic Questions</li>
-          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">What is PBL? / High Quality Project Based Learning</li>
-          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">Culturally Responsive Teaching &amp; Pedagogy</li>
-          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">Cornell Tech CS Coaching Toolkit</li>
+          <li style="padding:6px 0;"><a href="https://www.challengebasedlearning.org/" target="_blank" style="color:rgba(255,255,255,0.65); text-decoration:none; border-bottom:1px solid rgba(255,255,255,0.2); transition:color 0.2s, border-color 0.2s;" onmouseover="this.style.color='var(--gold)';this.style.borderColor='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,0.65)';this.style.borderColor='rgba(255,255,255,0.2)'">Challenge Based Learning</a></li>
+          <li style="padding:6px 0;"><a href="https://teachempowered.org/classroom-tools-for-teachers/" target="_blank" style="color:rgba(255,255,255,0.65); text-decoration:none; border-bottom:1px solid rgba(255,255,255,0.2); transition:color 0.2s, border-color 0.2s;" onmouseover="this.style.color='var(--gold)';this.style.borderColor='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,0.65)';this.style.borderColor='rgba(255,255,255,0.2)'">Teach Empowered Classroom Tools</a></li>
+          <li style="padding:6px 0;"><a href="https://udl4cs.education.ufl.edu/planning-computing-instruction/" target="_blank" style="color:rgba(255,255,255,0.65); text-decoration:none; border-bottom:1px solid rgba(255,255,255,0.2); transition:color 0.2s, border-color 0.2s;" onmouseover="this.style.color='var(--gold)';this.style.borderColor='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,0.65)';this.style.borderColor='rgba(255,255,255,0.2)'">Planning Computing Instruction through the UDL Framework</a></li>
+          <li style="padding:6px 0;"><a href="https://udl4cs.education.ufl.edu/" target="_blank" style="color:rgba(255,255,255,0.65); text-decoration:none; border-bottom:1px solid rgba(255,255,255,0.2); transition:color 0.2s, border-color 0.2s;" onmouseover="this.style.color='var(--gold)';this.style.borderColor='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,0.65)';this.style.borderColor='rgba(255,255,255,0.2)'">Universal Design for Learning for Computer Science</a></li>
+          <li style="padding:6px 0;"><a href="https://tilt.colostate.edu/the-socratic-method/" target="_blank" style="color:rgba(255,255,255,0.65); text-decoration:none; border-bottom:1px solid rgba(255,255,255,0.2); transition:color 0.2s, border-color 0.2s;" onmouseover="this.style.color='var(--gold)';this.style.borderColor='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,0.65)';this.style.borderColor='rgba(255,255,255,0.2)'">The Socratic Method</a></li>
+          <li style="padding:6px 0;"><a href="https://cetl.uconn.edu/resources/teaching-your-course/leading-effective-discussions/socratic-questions/" target="_blank" style="color:rgba(255,255,255,0.65); text-decoration:none; border-bottom:1px solid rgba(255,255,255,0.2); transition:color 0.2s, border-color 0.2s;" onmouseover="this.style.color='var(--gold)';this.style.borderColor='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,0.65)';this.style.borderColor='rgba(255,255,255,0.2)'">Leading Effective Discussions w/ Socratic Questions</a></li>
+          <li style="padding:6px 0;"><a href="https://www.pblworks.org/what-is-pbl" target="_blank" style="color:rgba(255,255,255,0.65); text-decoration:none; border-bottom:1px solid rgba(255,255,255,0.2); transition:color 0.2s, border-color 0.2s;" onmouseover="this.style.color='var(--gold)';this.style.borderColor='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,0.65)';this.style.borderColor='rgba(255,255,255,0.2)'">What is PBL? / High Quality Project Based Learning</a></li>
+          <li style="padding:6px 0;"><a href="https://www.nationalequityproject.org/culturally-responsive-teaching" target="_blank" style="color:rgba(255,255,255,0.65); text-decoration:none; border-bottom:1px solid rgba(255,255,255,0.2); transition:color 0.2s, border-color 0.2s;" onmouseover="this.style.color='var(--gold)';this.style.borderColor='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,0.65)';this.style.borderColor='rgba(255,255,255,0.2)'">Culturally Responsive Teaching &amp; Pedagogy</a></li>
+          <li style="padding:6px 0;"><a href="https://tech.cornell.edu/cs-coaching-toolkit/" target="_blank" style="color:rgba(255,255,255,0.65); text-decoration:none; border-bottom:1px solid rgba(255,255,255,0.2); transition:color 0.2s, border-color 0.2s;" onmouseover="this.style.color='var(--gold)';this.style.borderColor='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,0.65)';this.style.borderColor='rgba(255,255,255,0.2)'">Cornell Tech CS Coaching Toolkit</a></li>
         </ul>
       </div>
       <div class="card" style="background:rgba(255,255,255,0.06); border-color:rgba(255,255,255,0.08);">
@@ -2116,14 +2527,14 @@
       <div class="card" style="background:rgba(255,255,255,0.06); border-color:rgba(255,255,255,0.08);">
         <h3 style="font-family:'DM Serif Display',serif; color:var(--gold); margin-bottom:16px;">Accessibility Resources</h3>
         <ul style="list-style:none;">
-          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">Making Your Presentation Accessible (Ladner &amp; Rector)</li>
-          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">Accessible Presentation Guide (SIGACCESS)</li>
-          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">Slides for Teaching CS to Blind &amp; Visually Impaired Students</li>
-          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">Slides for Teaching CS to Deaf &amp; Hard of Hearing Students</li>
-          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">Slides for Teaching CS to Students with Learning Disabilities</li>
-          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">Slides for Teaching CS to Neurodiverse Students</li>
-          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">Atkinsons Hyperlegible Font for Readers with Low Vision</li>
-          <li style="color:rgba(255,255,255,0.65); padding:6px 0;">Google Tech Writing for Accessibility (self paced)</li>
+          <li style="padding:6px 0;"><a href="https://interactions.acm.org/archive/view/july-august-2017/making-your-presentation-accessible" target="_blank" style="color:rgba(255,255,255,0.65); text-decoration:none; border-bottom:1px solid rgba(255,255,255,0.2); transition:color 0.2s, border-color 0.2s;" onmouseover="this.style.color='var(--gold)';this.style.borderColor='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,0.65)';this.style.borderColor='rgba(255,255,255,0.2)'">Making Your Presentation Accessible (Ladner &amp; Rector)</a></li>
+          <li style="padding:6px 0;"><a href="https://www.sigaccess.org/welcome-to-sigaccess/resources/accessible-presentation-guide/" target="_blank" style="color:rgba(255,255,255,0.65); text-decoration:none; border-bottom:1px solid rgba(255,255,255,0.2); transition:color 0.2s, border-color 0.2s;" onmouseover="this.style.color='var(--gold)';this.style.borderColor='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,0.65)';this.style.borderColor='rgba(255,255,255,0.2)'">Accessible Presentation Guide (SIGACCESS)</a></li>
+          <li style="padding:6px 0;"><a href="https://www.washington.edu/accesscomputing/teaching-cs-blind-and-visually-impaired-students" target="_blank" style="color:rgba(255,255,255,0.65); text-decoration:none; border-bottom:1px solid rgba(255,255,255,0.2); transition:color 0.2s, border-color 0.2s;" onmouseover="this.style.color='var(--gold)';this.style.borderColor='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,0.65)';this.style.borderColor='rgba(255,255,255,0.2)'">Slides for Teaching CS to Blind &amp; Visually Impaired Students</a></li>
+          <li style="padding:6px 0;"><a href="https://www.washington.edu/accesscomputing/teaching-cs-deaf-and-hard-hearing-students" target="_blank" style="color:rgba(255,255,255,0.65); text-decoration:none; border-bottom:1px solid rgba(255,255,255,0.2); transition:color 0.2s, border-color 0.2s;" onmouseover="this.style.color='var(--gold)';this.style.borderColor='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,0.65)';this.style.borderColor='rgba(255,255,255,0.2)'">Slides for Teaching CS to Deaf &amp; Hard of Hearing Students</a></li>
+          <li style="padding:6px 0;"><a href="https://www.washington.edu/doit/webinars/?webinar=infosysld" target="_blank" style="color:rgba(255,255,255,0.65); text-decoration:none; border-bottom:1px solid rgba(255,255,255,0.2); transition:color 0.2s, border-color 0.2s;" onmouseover="this.style.color='var(--gold)';this.style.borderColor='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,0.65)';this.style.borderColor='rgba(255,255,255,0.2)'">Slides for Teaching CS to Students with Learning Disabilities</a></li>
+          <li style="padding:6px 0;"><a href="https://www.washington.edu/doit/webinars/?webinar=infosysneuro" target="_blank" style="color:rgba(255,255,255,0.65); text-decoration:none; border-bottom:1px solid rgba(255,255,255,0.2); transition:color 0.2s, border-color 0.2s;" onmouseover="this.style.color='var(--gold)';this.style.borderColor='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,0.65)';this.style.borderColor='rgba(255,255,255,0.2)'">Slides for Teaching CS to Neurodiverse Students</a></li>
+          <li style="padding:6px 0;"><a href="https://www.brailleinstitute.org/freefont/" target="_blank" style="color:rgba(255,255,255,0.65); text-decoration:none; border-bottom:1px solid rgba(255,255,255,0.2); transition:color 0.2s, border-color 0.2s;" onmouseover="this.style.color='var(--gold)';this.style.borderColor='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,0.65)';this.style.borderColor='rgba(255,255,255,0.2)'">Atkinson Hyperlegible Font for Readers with Low Vision</a></li>
+          <li style="padding:6px 0;"><a href="https://developers.google.com/tech-writing/accessibility/self-study" target="_blank" style="color:rgba(255,255,255,0.65); text-decoration:none; border-bottom:1px solid rgba(255,255,255,0.2); transition:color 0.2s, border-color 0.2s;" onmouseover="this.style.color='var(--gold)';this.style.borderColor='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,0.65)';this.style.borderColor='rgba(255,255,255,0.2)'">Google Tech Writing for Accessibility (self paced)</a></li>
         </ul>
       </div>
     </div>
@@ -2281,6 +2692,26 @@ document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 function toggleScenario(header) {
   const card = header.closest('.scenario-card');
   card.classList.toggle('open');
+}
+
+// ===== QUADRANT REVEAL =====
+function toggleQuadrant(cell) {
+  cell.classList.toggle('revealed');
+  checkAllRevealed();
+}
+function revealAllQuadrants() {
+  document.querySelectorAll('.quadrant-cell').forEach(c => c.classList.add('revealed'));
+  checkAllRevealed();
+}
+function checkAllRevealed() {
+  const all = document.querySelectorAll('.quadrant-cell');
+  const revealed = document.querySelectorAll('.quadrant-cell.revealed');
+  const btn = document.querySelector('.quadrant-reveal-all');
+  if (btn && all.length === revealed.length) {
+    btn.style.opacity = '0.4';
+    btn.textContent = 'All Styles Revealed';
+    btn.style.pointerEvents = 'none';
+  }
 }
 </script>
 </body>
